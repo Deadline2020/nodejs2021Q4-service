@@ -13,6 +13,10 @@ const getUser = (req, reply) => {
 
   if (user) {
     reply.send(user);
+  } else {
+    reply.status(404).send({
+      message: 'User not found',
+    });
   }
 };
 
@@ -31,6 +35,10 @@ const updateUser = (req, reply) => {
 
   if (user) {
     reply.send(user);
+  } else {
+    reply.status(404).send({
+      message: 'User not found',
+    });
   }
 };
 
@@ -39,6 +47,10 @@ const removeUser = (req, reply) => {
 
   if (usersService.removeUser(id)) {
     reply.code(204).send();
+  } else {
+    reply.status(404).send({
+      message: 'User not found',
+    });
   }
 };
 

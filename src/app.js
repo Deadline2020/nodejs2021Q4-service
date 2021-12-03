@@ -1,9 +1,10 @@
 const fastify = require('fastify');
 
+// const app = fastify({ logger: true });
 const app = fastify();
 
 app.register(require('./resources/users/user.router.js'));
-// app.register(require('./resources/boards/board.router.js'));
+app.register(require('./resources/boards/board.router.js'));
 
 module.exports = app;
 // const express = require('express');
