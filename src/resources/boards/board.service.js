@@ -14,8 +14,8 @@ const addBoard = (body) => {
     return newColumn;
   });
 
-  board.columns = columns;
   board.id = uuid();
+  board.columns = columns;
 
   boardsRepo.addBoard(board);
 

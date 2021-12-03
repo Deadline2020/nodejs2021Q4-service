@@ -1,5 +1,6 @@
 const viewModel = {
   type: 'object',
+  required: ['name'],
   properties: {
     id: { type: 'string' },
     name: { type: 'string' },
@@ -9,6 +10,7 @@ const viewModel = {
 
 const bodyModel = {
   type: 'object',
+  required: ['name'],
   properties: {
     name: { type: 'string' },
     login: { type: 'string' },
@@ -30,7 +32,7 @@ const getAllUsers = {
 const getUser = {
   schema: {
     params: {
-      id: { type: 'string' },
+      userId: { type: 'string' },
     },
     response: {
       200: viewModel,
@@ -50,7 +52,7 @@ const addUser = {
 const updateUser = {
   schema: {
     params: {
-      id: { type: 'string' },
+      userId: { type: 'string' },
     },
     body: bodyModel,
     response: {
@@ -62,7 +64,7 @@ const updateUser = {
 const removeUser = {
   schema: {
     params: {
-      id: { type: 'string' },
+      userId: { type: 'string' },
     },
   },
 };

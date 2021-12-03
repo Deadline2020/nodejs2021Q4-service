@@ -8,8 +8,8 @@ const getAllUsers = (req, reply) => {
 };
 
 const getUser = (req, reply) => {
-  const id = req.params.userId;
-  const user = usersService.getUser(id);
+  const {userId} = req.params;
+  const user = usersService.getUser(userId);
 
   if (user) {
     reply.send(user);
@@ -28,10 +28,10 @@ const addUser = (req, reply) => {
 };
 
 const updateUser = (req, reply) => {
-  const id = req.params.userId;
+  const {userId} = req.params;
   const { body } = req;
 
-  const user = usersService.updateUser(body, id);
+  const user = usersService.updateUser(body, userId);
 
   if (user) {
     reply.send(user);
@@ -43,9 +43,9 @@ const updateUser = (req, reply) => {
 };
 
 const removeUser = (req, reply) => {
-  const id = req.params.userId;
+  const {userId} = req.params;
 
-  if (usersService.removeUser(id)) {
+  if (usersService.removeUser(userId)) {
     reply.code(204).send();
   } else {
     reply.status(404).send({

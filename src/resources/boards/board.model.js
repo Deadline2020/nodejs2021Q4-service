@@ -1,5 +1,6 @@
 const viewModel = {
   type: 'object',
+  required: ['title', 'columns'],
   properties: {
     id: { type: 'string' },
     title: { type: 'string' },
@@ -7,6 +8,7 @@ const viewModel = {
       type: 'array',
       items: {
         type: 'object',
+        required: ['title', 'order'],
         properties: {
           id: { type: 'string' },
           title: { type: 'string' },
@@ -19,12 +21,14 @@ const viewModel = {
 
 const bodyModel = {
   type: 'object',
+  required: ['title', 'columns'],
   properties: {
     title: { type: 'string' },
     columns: {
       type: 'array',
       items: {
         type: 'object',
+        required: ['title', 'order'],
         properties: {
           title: { type: 'string' },
           order: { type: 'number' },
@@ -48,7 +52,7 @@ const getAllBoards = {
 const getBoard = {
   schema: {
     params: {
-      id: { type: 'string' },
+      boardId: { type: 'string' },
     },
     response: {
       200: viewModel,
@@ -68,7 +72,7 @@ const addBoard = {
 const updateBoard = {
   schema: {
     params: {
-      id: { type: 'string' },
+      boardId: { type: 'string' },
     },
     body: bodyModel,
     response: {
@@ -80,7 +84,7 @@ const updateBoard = {
 const removeBoard = {
   schema: {
     params: {
-      id: { type: 'string' },
+      boardId: { type: 'string' },
     },
   },
 };

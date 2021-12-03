@@ -8,8 +8,8 @@ const getAllBoards = (req, reply) => {
 };
 
 const getBoard = (req, reply) => {
-  const id = req.params.boardId;
-  const board = boardsService.getBoard(id);
+  const {boardId} = req.params;
+  const board = boardsService.getBoard(boardId);
 
   if (board) {
     reply.send(board);
@@ -28,10 +28,10 @@ const addBoard = (req, reply) => {
 };
 
 const updateBoard = (req, reply) => {
-  const id = req.params.boardId;
+  const {boardId} = req.params;
   const { body } = req;
 
-  const board = boardsService.updateBoard(body, id);
+  const board = boardsService.updateBoard(body, boardId);
 
   if (board) {
     reply.send(board);
@@ -43,9 +43,9 @@ const updateBoard = (req, reply) => {
 };
 
 const removeBoard = (req, reply) => {
-  const id = req.params.boardId;
+  const {boardId} = req.params;
 
-  if (boardsService.removeBoard(id)) {
+  if (boardsService.removeBoard(boardId)) {
     reply.code(204).send();
   } else {
     reply.status(404).send({
