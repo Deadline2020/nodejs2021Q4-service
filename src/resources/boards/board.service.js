@@ -1,6 +1,7 @@
 const { v4: uuid } = require('uuid');
 
 const boardsRepo = require('./board.memory.repository');
+const tasksService = require('../tasks/task.service');
 
 const getAllBoards = () => boardsRepo.getAllBoards();
 
@@ -41,7 +42,14 @@ const removeBoard = (id) => {
   const indexDB = boardsRepo.getIndexDB(id);
 
   if (indexDB !== -1) {
+    const tasks = tasksService.getAllTasksByBoard(id);
+    console.log('!!!!!!!!!!!tasks: ', tasks);
+    tasks.forEach((task) => {
+      tasksService.removeTask(id, task.id);
+    });
+
     boardsRepo.removeBoard(indexDB);
+    console.log('!!!!!!!!! Delete Board');
     return true;
   }
   return false;

@@ -1,27 +1,27 @@
 const viewModel = {
   type: 'object',
-  required: ['title', 'order', 'boardId', 'columnId'],
+  required: ['title', 'order', 'boardId'],
   properties: {
     id: { type: 'string' },
     order: { type: 'number' },
     title: { type: 'string' },
     description: { type: 'string' },
-    userId: { type: 'string' },
+    userId: { type: ['string', 'null'] },
     boardId: { type: 'string' },
-    columnId: { type: 'string' },
+    columnId: { type: ['string', 'null'] },
   },
 };
 
 const bodyModel = {
   type: 'object',
-  required: ['title', 'order', 'boardId', 'columnId'],
+  required: ['title', 'order', 'boardId'],
   properties: {
     order: { type: 'number' },
     title: { type: 'string' },
     description: { type: 'string' },
-    userId: { type: 'string' },
+    userId: { type: ['string', 'null'] },
     boardId: { type: 'string' },
-    columnId: { type: 'string' },
+    columnId: { type: ['string', 'null'] },
   },
 };
 

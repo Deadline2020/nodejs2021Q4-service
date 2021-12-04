@@ -1,17 +1,19 @@
 const tasksService = require('./task.service');
 const tasksModel = require('./task.model');
 
-const getAllTasks = (req, reply) => {
+const getAllTasksByBoard = (req, reply) => {
   const { boardId } = req.params;
-  const allTasks = tasksService.getAllTasks(boardId);
+  const allTasks = tasksService.getAllTasksByBoard(boardId);
 
   reply.send(allTasks);
 };
 
 const getTask = (req, reply) => {
+  // console.log('!!!!!!!!!!!!!!!!!!!req.params: ', req.params);
   const { boardId } = req.params;
   const { taskId } = req.params;
   const task = tasksService.getTask(boardId, taskId);
+  // console.log('????????????????????????????task: ', task);
 
   if (task) {
     reply.send(task);
@@ -23,10 +25,12 @@ const getTask = (req, reply) => {
 };
 
 const addTask = (req, reply) => {
+  // console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!');
   const { boardId } = req.params;
   const { body } = req;
 
   const task = tasksService.addTask(body, boardId);
+  // console.log('task: ', task);
   reply.code(201).send(task);
 };
 
@@ -60,7 +64,7 @@ const removeTask = (req, reply) => {
 };
 
 function taskRoutes(app, options, done) {
-  app.get('/boards/:boardId/tasks', tasksModel.getAllTasks, getAllTasks);
+  app.get('/boards/:boardId/tasks', tasksModel.getAllTasks, getAllTasksByBoard);
   app.get('/boards/:boardId/tasks/:taskId', tasksModel.getTask, getTask);
   app.post('/boards/:boardId/tasks', tasksModel.addTask, addTask);
   app.put('/boards/:boardId/tasks/:taskId', tasksModel.updateTask, updateTask);

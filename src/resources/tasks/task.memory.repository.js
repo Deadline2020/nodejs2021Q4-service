@@ -1,6 +1,7 @@
 const taskDB = [];
 
-const getAllTasks = (boardId) =>
+const getAllTasksByUser = (id) => taskDB.filter((task) => task.userId === id);
+const getAllTasksByBoard = (boardId) =>
   taskDB.filter((task) => task.boardId === boardId);
 const getTask = (id) => taskDB.find((task) => task.id === id);
 const addTask = (task) => taskDB.push(task);
@@ -15,7 +16,8 @@ const getIndexDB = (id) => taskDB.findIndex((task) => task.id === id);
 const getTaskByIndexDB = (index) => taskDB[index];
 
 module.exports = {
-  getAllTasks,
+  getAllTasksByUser,
+  getAllTasksByBoard,
   getTask,
   addTask,
   updateTask,

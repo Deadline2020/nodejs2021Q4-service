@@ -8,7 +8,7 @@ const getAllUsers = (req, reply) => {
 };
 
 const getUser = (req, reply) => {
-  const {userId} = req.params;
+  const { userId } = req.params;
   const user = usersService.getUser(userId);
 
   if (user) {
@@ -24,11 +24,12 @@ const addUser = (req, reply) => {
   const { body } = req;
 
   const user = usersService.addUser(body);
+  // console.log('user: ', user);
   reply.code(201).send(user);
 };
 
 const updateUser = (req, reply) => {
-  const {userId} = req.params;
+  const { userId } = req.params;
   const { body } = req;
 
   const user = usersService.updateUser(body, userId);
@@ -43,7 +44,7 @@ const updateUser = (req, reply) => {
 };
 
 const removeUser = (req, reply) => {
-  const {userId} = req.params;
+  const { userId } = req.params;
 
   if (usersService.removeUser(userId)) {
     reply.code(204).send();
