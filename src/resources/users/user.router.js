@@ -22,16 +22,14 @@ const getUser = (req, reply) => {
 
 const addUser = (req, reply) => {
   const { body } = req;
-
   const user = usersService.addUser(body);
-  // console.log('user: ', user);
+
   reply.code(201).send(user);
 };
 
 const updateUser = (req, reply) => {
   const { userId } = req.params;
   const { body } = req;
-
   const user = usersService.updateUser(body, userId);
 
   if (user) {

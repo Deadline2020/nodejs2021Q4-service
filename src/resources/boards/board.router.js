@@ -22,16 +22,14 @@ const getBoard = (req, reply) => {
 
 const addBoard = (req, reply) => {
   const { body } = req;
-
   const board = boardsService.addBoard(body);
-  // console.log('board: ', board);
+
   reply.code(201).send(board);
 };
 
 const updateBoard = (req, reply) => {
   const { boardId } = req.params;
   const { body } = req;
-
   const board = boardsService.updateBoard(body, boardId);
 
   if (board) {

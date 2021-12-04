@@ -1,19 +1,26 @@
 const taskDB = [];
 
-const getAllTasksByUser = (id) => taskDB.filter((task) => task.userId === id);
+const getAllTasksByUser = (userId) =>
+  taskDB.filter((task) => task.userId === userId);
+
 const getAllTasksByBoard = (boardId) =>
   taskDB.filter((task) => task.boardId === boardId);
-const getTask = (id) => taskDB.find((task) => task.id === id);
+
+const getTask = (taskId) => taskDB.find((task) => task.id === taskId);
+
 const addTask = (task) => taskDB.push(task);
+
 const updateTask = (task, indexDB) => {
   taskDB.splice(indexDB, 1, task);
 };
+
 const removeTask = (indexDB) => {
   taskDB.splice(indexDB, 1);
 };
 
-const getIndexDB = (id) => taskDB.findIndex((task) => task.id === id);
-const getTaskByIndexDB = (index) => taskDB[index];
+const getIndexDB = (taskId) => taskDB.findIndex((task) => task.id === taskId);
+
+const getTaskByIndexDB = (indexDB) => taskDB[indexDB];
 
 module.exports = {
   getAllTasksByUser,
