@@ -1,4 +1,6 @@
-const viewModel = {
+import I = require('../interfaces');
+
+const viewModel: I.UserModel = {
   type: 'object',
   required: ['name'],
   properties: {
@@ -8,7 +10,7 @@ const viewModel = {
   },
 };
 
-const bodyModel = {
+const bodyModel: I.UserModel = {
   type: 'object',
   required: ['name'],
   properties: {
@@ -18,7 +20,7 @@ const bodyModel = {
   },
 };
 
-const getAllUsers = {
+const getAllUsersSchema: I.UserSchema = {
   schema: {
     response: {
       200: {
@@ -29,7 +31,7 @@ const getAllUsers = {
   },
 };
 
-const getUser = {
+const getUserSchema: I.UserSchema = {
   schema: {
     params: {
       userId: { type: 'string' },
@@ -40,7 +42,7 @@ const getUser = {
   },
 };
 
-const addUser = {
+const addUserSchema: I.UserSchema = {
   schema: {
     body: bodyModel,
     response: {
@@ -49,7 +51,7 @@ const addUser = {
   },
 };
 
-const updateUser = {
+const updateUserSchema: I.UserSchema = {
   schema: {
     params: {
       userId: { type: 'string' },
@@ -61,7 +63,7 @@ const updateUser = {
   },
 };
 
-const removeUser = {
+const removeUserSchema: I.UserSchema = {
   schema: {
     params: {
       userId: { type: 'string' },
@@ -69,4 +71,10 @@ const removeUser = {
   },
 };
 
-module.exports = { getAllUsers, getUser, addUser, updateUser, removeUser };
+export = {
+  getAllUsersSchema,
+  getUserSchema,
+  addUserSchema,
+  updateUserSchema,
+  removeUserSchema,
+};
