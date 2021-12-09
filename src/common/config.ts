@@ -1,7 +1,5 @@
-// import path from 'path';
-// import dotenv from 'dotenv';
-import dotenv = require('dotenv');
-import path = require('path');
+import dotenv from 'dotenv';
+import path from 'path';
 
 dotenv.config({
   path: path.join(__dirname, '../../.env'),
@@ -23,6 +21,4 @@ const ENV: IENV = {
   AUTH_MODE: process.env.AUTH_MODE === 'true',
 };
 
-export = ENV;
-// module.exports = ENV;
-// export default ENV;
+export default ENV;

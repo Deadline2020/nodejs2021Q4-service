@@ -1,27 +1,29 @@
-import uuid = require('uuid');
-import usersRepo = require('./user.memory.repository');
-import tasksService = require('../tasks/task.service');
-import I = require('../interfaces');
+import { v4 as uuid } from 'uuid';
 
-const getAllUsers = (): I.User[] => usersRepo.getAllUsers();
+import * as usersRepo from './user.memory.repository';
+import * as tasksService from '../tasks/task.service';
+import { User } from './user.model';
+import { Task } from '../tasks/task.model';
 
-const getUser = (userId: string): I.User | undefined =>
+export const getAllUsers = (): User[] => usersRepo.getAllUsers();
+
+export const getUser = (userId: string): User | undefined =>
   usersRepo.getUser(userId);
 
-const addUser = (body: I.User) => {
-  const user: I.User = { ...body };
+export const addUser = (body: User) => {
+  const user: User = { ...body };
 
-  user.id = uuid.v4();
+  user.id = uuid();
   usersRepo.addUser(user);
 
   return user;
 };
 
-const updateUser = (body: I.User, userId: string): I.User | undefined => {
-  const indexDB = usersRepo.getIndexDB(userId);
+export const updateUser = (body: User, userId: string): User | undefined => {
+  const indexDB: number = usersRepo.getIndexDB(userId);
 
   if (indexDB !== -1) {
-    const user: I.User = { ...body };
+    const user: User = { ...body };
 
     user.id = userId;
     usersRepo.updateUser(user, indexDB);
@@ -32,17 +34,17 @@ const updateUser = (body: I.User, userId: string): I.User | undefined => {
   return undefined;
 };
 
-const removeUser = (userId: string): boolean => {
+export const removeUser = (userId: string): boolean => {
   const indexDB: number = usersRepo.getIndexDB(userId);
 
   if (indexDB !== -1) {
-    const tasks: I.Task[] = tasksService.getAllTasksByUser(userId);
+    const tasks: Task[] = tasksService.getAllTasksByUser(userId);
 
-    tasks.forEach((task: I.Task) => {
-      const newTask: I.Task = { ...task };
+    tasks.forEach((task: Task) => {
+      const newTask: Task = { ...task };
 
       newTask.userId = null;
-      tasksService.updateTask(newTask, newTask.boardId, newTask.id);
+      tasksService.updateTask(newTask, newTask.boardId, newTask.id as string);
     });
 
     usersRepo.removeUser(indexDB);
@@ -52,5 +54,3 @@ const removeUser = (userId: string): boolean => {
 
   return false;
 };
-
-export = { getAllUsers, getUser, addUser, updateUser, removeUser };

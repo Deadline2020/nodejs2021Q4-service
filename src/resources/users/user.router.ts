@@ -1,23 +1,31 @@
-import fastify = require('fastify');
-import usersService = require('./user.service');
-import usersModel = require('./user.model');
-import I = require('../interfaces');
+import {
+  FastifyInstance,
+  FastifyPluginOptions,
+  FastifyReply,
+  FastifyRequest,
+} from 'fastify';
 
-const getAllUsers = (
-  _: fastify.FastifyRequest,
-  reply: fastify.FastifyReply
-): void => {
-  const allUsers: I.User[] = usersService.getAllUsers();
+import * as usersService from './user.service';
+import * as usersModel from './user.model';
+import { User } from './user.model';
+
+interface Params {
+  userId: string;
+}
+
+interface Request extends FastifyRequest {
+  body: User;
+}
+
+const getAllUsers = (_: FastifyRequest, reply: FastifyReply): void => {
+  const allUsers: User[] = usersService.getAllUsers();
 
   reply.send(allUsers);
 };
 
-const getUser = (
-  req: fastify.FastifyRequest,
-  reply: fastify.FastifyReply
-): void => {
-  const { userId } = req.params as I.Params;
-  const user: I.User | undefined = usersService.getUser(userId as string);
+const getUser = (req: FastifyRequest, reply: FastifyReply): void => {
+  const { userId } = req.params as Params;
+  const user: User | undefined = usersService.getUser(userId);
 
   if (user) {
     reply.send(user);
@@ -28,26 +36,17 @@ const getUser = (
   }
 };
 
-const addUser = (
-  req: fastify.FastifyRequest,
-  reply: fastify.FastifyReply
-): void => {
-  const { body } = req;
-  const user: I.User = usersService.addUser(body as I.User);
+const addUser = (req: FastifyRequest, reply: FastifyReply): void => {
+  const { body } = req as Request;
+  const user: User = usersService.addUser(body);
 
   reply.code(201).send(user);
 };
 
-const updateUser = (
-  req: fastify.FastifyRequest,
-  reply: fastify.FastifyReply
-): void => {
-  const { userId } = req.params as I.Params;
-  const { body } = req;
-  const user: I.User | undefined = usersService.updateUser(
-    body as I.User,
-    userId as string
-  );
+const updateUser = (req: FastifyRequest, reply: FastifyReply): void => {
+  const { userId } = req.params as Params;
+  const { body } = req as Request;
+  const user: User | undefined = usersService.updateUser(body, userId);
 
   if (user) {
     reply.send(user);
@@ -58,13 +57,10 @@ const updateUser = (
   }
 };
 
-const removeUser = (
-  req: fastify.FastifyRequest,
-  reply: fastify.FastifyReply
-): void => {
-  const { userId } = req.params as I.Params;
+const removeUser = (req: FastifyRequest, reply: FastifyReply): void => {
+  const { userId } = req.params as Params;
 
-  if (usersService.removeUser(userId as string)) {
+  if (usersService.removeUser(userId)) {
     reply.code(204).send();
   } else {
     reply.status(404).send({
@@ -74,17 +70,17 @@ const removeUser = (
 };
 
 function userRoutes(
-  app: fastify.FastifyInstance,
-  _: fastify.FastifyPluginOptions,
+  app: FastifyInstance,
+  _: FastifyPluginOptions,
   done: () => void
 ): void {
-  app.get('/users', usersModel.getAllUsersSchema, getAllUsers);
-  app.get('/users/:userId', usersModel.getUserSchema, getUser);
-  app.post('/users', usersModel.addUserSchema, addUser);
-  app.put('/users/:userId', usersModel.updateUserSchema, updateUser);
-  app.delete('/users/:userId', usersModel.removeUserSchema, removeUser);
+  app.get('/users', usersModel.getAllUsers, getAllUsers);
+  app.get('/users/:userId', usersModel.getUser, getUser);
+  app.post('/users', usersModel.addUser, addUser);
+  app.put('/users/:userId', usersModel.updateUser, updateUser);
+  app.delete('/users/:userId', usersModel.removeUser, removeUser);
 
   done();
 }
 
-export = userRoutes;
+export default userRoutes;

@@ -1,29 +1,21 @@
-import I = require('../interfaces');
+import { User } from './user.model';
 
-const userDB: I.User[] = [];
+export const userDB: User[] = [];
 
-const getAllUsers = (): I.User[] => userDB;
+export const getAllUsers = (): User[] => userDB;
 
-const getUser = (userId: string): I.User | undefined =>
-  userDB.find((user: I.User): boolean => user.id === userId);
+export const getUser = (userId: string): User | undefined =>
+  userDB.find((user: User): boolean => user.id === userId);
 
-const addUser = (user: I.User): number => userDB.push(user);
+export const addUser = (user: User): number => userDB.push(user);
 
-const updateUser = (user: I.User, indexDB: number): void => {
+export const updateUser = (user: User, indexDB: number): void => {
   userDB.splice(indexDB, 1, user);
 };
 
-const removeUser = (indexDB: number): void => {
+export const removeUser = (indexDB: number): void => {
   userDB.splice(indexDB, 1);
 };
 
-const getIndexDB = (userId:string): number => userDB.findIndex((user: I.User): boolean => user.id === userId);
-
-export = {
-  getAllUsers,
-  getUser,
-  addUser,
-  updateUser,
-  removeUser,
-  getIndexDB,
-};
+export const getIndexDB = (userId: string): number =>
+  userDB.findIndex((user: User): boolean => user.id === userId);

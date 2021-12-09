@@ -1,4 +1,37 @@
-const viewModel = {
+import { FastifySchema } from 'fastify';
+
+export interface Task {
+  id?: string;
+  order: string;
+  title: string;
+  description: string;
+  userId: string | null;
+  boardId: string;
+  columnId: string | null;
+}
+
+interface TaskModel {
+  type: string;
+  required?: string[];
+  properties: {
+    [key: string]: { type: string | string[] };
+  };
+}
+
+interface UserSchema extends FastifySchema {
+  schema: {
+    params?: {
+      boardId: { type: string };
+      taskId?: { type: string };
+    };
+    body?: TaskModel;
+    response?: {
+      [key: number]: TaskModel | { type: string; items: TaskModel };
+    };
+  };
+}
+
+const viewModel: TaskModel = {
   type: 'object',
   required: ['title', 'order', 'boardId'],
   properties: {
@@ -12,7 +45,7 @@ const viewModel = {
   },
 };
 
-const bodyModel = {
+const bodyModel: TaskModel = {
   type: 'object',
   required: ['title', 'order', 'boardId'],
   properties: {
@@ -25,7 +58,7 @@ const bodyModel = {
   },
 };
 
-const getAllTasks = {
+export const getAllTasks: UserSchema = {
   schema: {
     params: {
       boardId: { type: 'string' },
@@ -39,7 +72,7 @@ const getAllTasks = {
   },
 };
 
-const getTask = {
+export const getTask: UserSchema = {
   schema: {
     params: {
       boardId: { type: 'string' },
@@ -51,7 +84,7 @@ const getTask = {
   },
 };
 
-const addTask = {
+export const addTask: UserSchema = {
   schema: {
     params: {
       boardId: { type: 'string' },
@@ -63,7 +96,7 @@ const addTask = {
   },
 };
 
-const updateTask = {
+export const updateTask: UserSchema = {
   schema: {
     params: {
       boardId: { type: 'string' },
@@ -76,7 +109,7 @@ const updateTask = {
   },
 };
 
-const removeTask = {
+export const removeTask: UserSchema = {
   schema: {
     params: {
       boardId: { type: 'string' },
@@ -84,5 +117,3 @@ const removeTask = {
     },
   },
 };
-
-module.exports = { getAllTasks, getTask, addTask, updateTask, removeTask };

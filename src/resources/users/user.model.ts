@@ -1,6 +1,33 @@
-import I = require('../interfaces');
+import { FastifySchema } from "fastify";
 
-const viewModel: I.UserModel = {
+export interface User {
+  id?: string;
+  name: string;
+  login: string;
+  password?: string;
+}
+
+interface UserModel {
+  type: string;
+  required?: string[];
+  properties: {
+    [key: string]: { type: string | string[] };
+  };
+}
+
+interface UserSchema extends FastifySchema {
+  schema: {
+    params?: {
+      userId: { type: string };
+    };
+    body?: UserModel;
+    response?: {
+      [key: number]: UserModel | { type: string; items: UserModel };
+    };
+  };
+}
+
+const viewModel: UserModel = {
   type: 'object',
   required: ['name'],
   properties: {
@@ -10,7 +37,7 @@ const viewModel: I.UserModel = {
   },
 };
 
-const bodyModel: I.UserModel = {
+const bodyModel: UserModel = {
   type: 'object',
   required: ['name'],
   properties: {
@@ -20,7 +47,7 @@ const bodyModel: I.UserModel = {
   },
 };
 
-const getAllUsersSchema: I.UserSchema = {
+export const getAllUsers: UserSchema = {
   schema: {
     response: {
       200: {
@@ -31,7 +58,7 @@ const getAllUsersSchema: I.UserSchema = {
   },
 };
 
-const getUserSchema: I.UserSchema = {
+export const getUser: UserSchema = {
   schema: {
     params: {
       userId: { type: 'string' },
@@ -42,7 +69,7 @@ const getUserSchema: I.UserSchema = {
   },
 };
 
-const addUserSchema: I.UserSchema = {
+export const addUser: UserSchema = {
   schema: {
     body: bodyModel,
     response: {
@@ -51,7 +78,7 @@ const addUserSchema: I.UserSchema = {
   },
 };
 
-const updateUserSchema: I.UserSchema = {
+export const updateUser: UserSchema = {
   schema: {
     params: {
       userId: { type: 'string' },
@@ -63,18 +90,10 @@ const updateUserSchema: I.UserSchema = {
   },
 };
 
-const removeUserSchema: I.UserSchema = {
+export const removeUser: UserSchema = {
   schema: {
     params: {
       userId: { type: 'string' },
     },
   },
-};
-
-export = {
-  getAllUsersSchema,
-  getUserSchema,
-  addUserSchema,
-  updateUserSchema,
-  removeUserSchema,
 };
