@@ -10,7 +10,7 @@ export const getAllUsers = (): User[] => usersRepo.getAllUsers();
 export const getUser = (userId: string): User | undefined =>
   usersRepo.getUser(userId);
 
-export const addUser = (body: User) => {
+export const addUser = (body: User): User => {
   const user: User = { ...body };
 
   user.id = uuid();
