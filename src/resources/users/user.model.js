@@ -1,22 +1,72 @@
-const uuid = require('uuid');
+const viewModel = {
+  type: 'object',
+  required: ['name'],
+  properties: {
+    id: { type: 'string' },
+    name: { type: 'string' },
+    login: { type: 'string' },
+  },
+};
 
-class User {
-  constructor({
-    id = uuid(),
-    name = 'USER',
-    login = 'user',
-    password = 'P@55w0rd'
-  } = {}) {
-    this.id = id;
-    this.name = name;
-    this.login = login;
-    this.password = password;
-  }
+const bodyModel = {
+  type: 'object',
+  required: ['name'],
+  properties: {
+    name: { type: 'string' },
+    login: { type: 'string' },
+    password: { type: 'string' },
+  },
+};
 
-  static toResponse(user) {
-    const { id, name, login } = user;
-    return { id, name, login };
-  }
-}
+const getAllUsers = {
+  schema: {
+    response: {
+      200: {
+        type: 'array',
+        items: viewModel,
+      },
+    },
+  },
+};
 
-module.exports = User;
+const getUser = {
+  schema: {
+    params: {
+      userId: { type: 'string' },
+    },
+    response: {
+      200: viewModel,
+    },
+  },
+};
+
+const addUser = {
+  schema: {
+    body: bodyModel,
+    response: {
+      201: viewModel,
+    },
+  },
+};
+
+const updateUser = {
+  schema: {
+    params: {
+      userId: { type: 'string' },
+    },
+    body: bodyModel,
+    response: {
+      200: viewModel,
+    },
+  },
+};
+
+const removeUser = {
+  schema: {
+    params: {
+      userId: { type: 'string' },
+    },
+  },
+};
+
+module.exports = { getAllUsers, getUser, addUser, updateUser, removeUser };
