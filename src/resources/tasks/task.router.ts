@@ -18,6 +18,12 @@ interface Request extends FastifyRequest {
   body: Task;
 }
 
+/**
+ * The route handler function. Requests the all task records with the corresponding board ID, and then sends them as a server response.
+ *
+ * @param req - http request object
+ * @param reply - http reply object
+ */
 const getAllTasksByBoard = (req: FastifyRequest, reply: FastifyReply): void => {
   const { boardId } = req.params as Params;
   const allTasks: Task[] = tasksService.getAllTasksByBoard(boardId);
@@ -25,6 +31,12 @@ const getAllTasksByBoard = (req: FastifyRequest, reply: FastifyReply): void => {
   reply.send(allTasks);
 };
 
+/**
+ * The route handler function. Requests the task record with the corresponding task and board IDs, and then sends it as a server response if the record was found, or send a `Task not found` message if not.
+ *
+ * @param req - http request object
+ * @param reply - http reply object
+ */
 const getTask = (req: FastifyRequest, reply: FastifyReply): void => {
   const { boardId } = req.params as Params;
   const { taskId } = req.params as Params;
@@ -39,6 +51,12 @@ const getTask = (req: FastifyRequest, reply: FastifyReply): void => {
   }
 };
 
+/**
+ * The route handler function. Sends a request to create the task record, and then sends new task record as a server response.
+ *
+ * @param req - http request object
+ * @param reply - http reply object
+ */
 const addTask = (req: FastifyRequest, reply: FastifyReply): void => {
   const { boardId } = req.params as Params;
   const { body } = req as Request;
@@ -47,6 +65,12 @@ const addTask = (req: FastifyRequest, reply: FastifyReply): void => {
   reply.code(201).send(task);
 };
 
+/**
+ * The route handler function. Sends a request to update the task record with the corresponding task and board IDs, and then sends updated task record as a server response if the record was found, or send a `Task not found` message if not.
+ *
+ * @param req - http request object
+ * @param reply - http reply object
+ */
 const updateTask = (req: FastifyRequest, reply: FastifyReply): void => {
   const { boardId } = req.params as Params;
   const { taskId } = req.params as Params;
@@ -62,6 +86,12 @@ const updateTask = (req: FastifyRequest, reply: FastifyReply): void => {
   }
 };
 
+/**
+ * The route handler function. Sends a request to delete the task record with the corresponding task and board IDs, and then sends status code 204 if the record was deleted, or send a `Task not found` message if not.
+ *
+ * @param req - http request object
+ * @param reply - http reply object
+ */
 const removeTask = (req: FastifyRequest, reply: FastifyReply): void => {
   const { boardId } = req.params as Params;
   const { taskId } = req.params as Params;
@@ -75,6 +105,13 @@ const removeTask = (req: FastifyRequest, reply: FastifyReply): void => {
   }
 };
 
+/**
+ * The function provide set of routes. To activate routes, use the `fastify.register()` method.
+
+ * @param app - instance of fastify server
+ * @param _ - set of options (not used)
+ * @param done -  callback function
+ */
 function taskRoutes(
   app: FastifyInstance,
   _: FastifyPluginOptions,
