@@ -1,12 +1,12 @@
 import pino from 'pino';
-import ENV from './config';
+
+import ENV from './common/config';
 
 const loggerConfig = {
   // level: ENV.LOGGER_LEVEL as pino.LevelWithSilent,
   transport: {
     targets: [
       {
-        // target: 'pino/file',
         target: 'pino-pretty',
         level: 'error' as pino.LevelWithSilent,
         options: {
@@ -21,7 +21,6 @@ const loggerConfig = {
       {
         level: ENV.LOGGER_LEVEL as pino.LevelWithSilent,
         target: 'pino-pretty',
-        // target: 'pino/file',
         options: {
           levelFirst: true,
           colorize: false,
@@ -33,11 +32,8 @@ const loggerConfig = {
       },
     ],
   },
-  // formatters: {
-  //   level(label: string, number: number) {
-  //     return { level: number };
-  //   },
-  // },
 };
 
-export default loggerConfig;
+const logger = pino(loggerConfig);
+
+export default logger;
