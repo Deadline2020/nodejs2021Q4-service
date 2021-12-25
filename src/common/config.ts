@@ -11,6 +11,7 @@ interface IENV {
   MONGO_CONNECTION_STRING: string | undefined;
   JWT_SECRET_KEY: string | undefined;
   AUTH_MODE: boolean;
+  LOGGER_LEVEL: string;
 }
 
 const ENV: IENV = {
@@ -19,6 +20,7 @@ const ENV: IENV = {
   MONGO_CONNECTION_STRING: process.env.MONGO_CONNECTION_STRING,
   JWT_SECRET_KEY: process.env.JWT_SECRET_KEY,
   AUTH_MODE: process.env.AUTH_MODE === 'true',
+  LOGGER_LEVEL: process.env.LOGGER_LEVEL || 'silent',
 };
 
 export default ENV;
