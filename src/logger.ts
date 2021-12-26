@@ -3,16 +3,16 @@ import pino from 'pino';
 import ENV from './common/config';
 
 const loggerConfig = {
-  // level: ENV.LOGGER_LEVEL as pino.LevelWithSilent,
+  level: ENV.LOGGER_LEVEL as pino.LevelWithSilent,
   transport: {
     targets: [
       {
-        target: 'pino-pretty',
         level: 'error' as pino.LevelWithSilent,
+        target: 'pino-pretty',
         options: {
           levelFirst: true,
           colorize: false,
-          translateTime: 'dd-mm-yyyy HH:MM:ss',
+          translateTime: 'SYS:dd-mm-yyyy HH:MM:ss',
           ignore: 'pid,hostname,reqId,req,res,responseTime',
           destination: './logs/error.log',
           mkdir: true,
@@ -24,7 +24,7 @@ const loggerConfig = {
         options: {
           levelFirst: true,
           colorize: false,
-          translateTime: 'dd-mm-yyyy HH:MM:ss',
+          translateTime: 'SYS:dd-mm-yyyy HH:MM:ss',
           ignore: 'pid,hostname,reqId,req,res,responseTime',
           destination: `./logs/${ENV.LOGGER_LEVEL}.log`,
           mkdir: true,
