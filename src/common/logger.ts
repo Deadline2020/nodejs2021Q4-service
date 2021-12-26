@@ -1,8 +1,8 @@
-import pino from 'pino';
+import pino, { LoggerOptions } from 'pino';
 
-import ENV from './common/config';
+import ENV from './config';
 
-const loggerConfig = {
+const loggerConfig: LoggerOptions = {
   level: ENV.LOGGER_LEVEL as pino.LevelWithSilent,
   transport: {
     targets: [
