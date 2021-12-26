@@ -1,4 +1,33 @@
-const viewModel = {
+import { FastifySchema } from "fastify";
+
+export interface User {
+  id?: string;
+  name: string;
+  login: string;
+  password?: string;
+}
+
+interface UserModel {
+  type: string;
+  required?: string[];
+  properties: {
+    [key: string]: { type: string | string[] };
+  };
+}
+
+interface UserSchema extends FastifySchema {
+  schema: {
+    params?: {
+      userId: { type: string };
+    };
+    body?: UserModel;
+    response?: {
+      [key: number]: UserModel | { type: string; items: UserModel };
+    };
+  };
+}
+
+const viewModel: UserModel = {
   type: 'object',
   required: ['name'],
   properties: {
@@ -8,7 +37,7 @@ const viewModel = {
   },
 };
 
-const bodyModel = {
+const bodyModel: UserModel = {
   type: 'object',
   required: ['name'],
   properties: {
@@ -18,7 +47,7 @@ const bodyModel = {
   },
 };
 
-const getAllUsers = {
+export const getAllUsers: UserSchema = {
   schema: {
     response: {
       200: {
@@ -29,7 +58,7 @@ const getAllUsers = {
   },
 };
 
-const getUser = {
+export const getUser: UserSchema = {
   schema: {
     params: {
       userId: { type: 'string' },
@@ -40,7 +69,7 @@ const getUser = {
   },
 };
 
-const addUser = {
+export const addUser: UserSchema = {
   schema: {
     body: bodyModel,
     response: {
@@ -49,7 +78,7 @@ const addUser = {
   },
 };
 
-const updateUser = {
+export const updateUser: UserSchema = {
   schema: {
     params: {
       userId: { type: 'string' },
@@ -61,12 +90,10 @@ const updateUser = {
   },
 };
 
-const removeUser = {
+export const removeUser: UserSchema = {
   schema: {
     params: {
       userId: { type: 'string' },
     },
   },
 };
-
-module.exports = { getAllUsers, getUser, addUser, updateUser, removeUser };
