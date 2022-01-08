@@ -1,0 +1,11 @@
+version: '3.0'
+
+services:
+
+  server:
+    image: app_server
+    build: .
+    ports:
+      - "${PORT}:${PORT}"
+    environment:
+      PORT: ${PORT}
