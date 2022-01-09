@@ -9,3 +9,14 @@ services:
       - "${PORT}:${PORT}"
     environment:
       PORT: ${PORT}
+    depends_on:
+      - "database"
+
+  database:
+    image: postgres_database
+    build: ./database/
+    ports:
+      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+    environment:
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD} 
