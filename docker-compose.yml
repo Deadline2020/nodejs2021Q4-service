@@ -13,6 +13,8 @@ services:
       - database
     networks:
       - custom_user_network
+    volumes:
+      - ./logs:/usr/app/logs
 
   database:
     image: postgres_database
@@ -26,6 +28,8 @@ services:
       POSTGRES_DB: ${POSTGRES_DB} 
     networks:
       - custom_user_network
+    volumes:
+      - ./database/data:/var/lib/postgresql/data
 
 networks:
   custom_user_network:
