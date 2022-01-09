@@ -15,8 +15,7 @@ export const getAllUsers = (): User[] => userDB;
  * @param userId - user ID
  * @returns The user record if the record was found or `undefined` if not
  */
-export const getUser = (userId: string): User | undefined =>
-  userDB.find((user: User): boolean => user.id === userId);
+export const getUser = (userId: string): User | undefined => userDB.find((user: User): boolean => user.id === userId);
 
 /**
  * The function of creating a user record in the database
@@ -52,5 +51,4 @@ export const removeUser = (indexDB: number): void => {
  * @param userId - user ID
  * @returns The index of user record in database if the record was found or `-1` if not
  */
-export const getIndexDB = (userId: string): number =>
-  userDB.findIndex((user: User): boolean => user.id === userId);
+export const getIndexDB = (userId: string): number => userDB.findIndex((user: User): boolean => user.id === userId);

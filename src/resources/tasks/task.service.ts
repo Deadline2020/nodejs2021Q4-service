@@ -1,4 +1,4 @@
-import { v4 as uuid } from 'uuid';
+import { randomUUID } from 'crypto';
 
 import * as tasksRepo from './task.memory.repository';
 import { Task } from './task.model';
@@ -44,7 +44,7 @@ export const getTask = (boardId: string, taskId: string): Task | undefined => {
 export const addTask = (body: Task, boardId: string): Task => {
   const task: Task = { ...body };
 
-  task.id = uuid();
+  task.id = randomUUID();
   task.boardId = boardId;
   tasksRepo.addTask(task);
 

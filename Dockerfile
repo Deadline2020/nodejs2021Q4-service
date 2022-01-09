@@ -3,7 +3,10 @@ EXPOSE 4000
 WORKDIR /usr/app/src
 
 COPY package*.json .
-RUN npm install
+# COPY package*.json ./
+RUN npm install --production
+# RUN npm ci
+
 
 COPY . .
 CMD [ "npm","start" ]

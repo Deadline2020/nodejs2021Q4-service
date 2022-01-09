@@ -1,4 +1,4 @@
-import { FastifySchema } from "fastify";
+import { FastifySchema } from 'fastify';
 
 export interface User {
   id?: string;
