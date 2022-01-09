@@ -15,6 +15,7 @@ services:
       - custom_user_network
     volumes:
       - ./logs:/usr/app/logs
+    restart: on-failure
 
   database:
     image: postgres_database
@@ -30,6 +31,7 @@ services:
       - custom_user_network
     volumes:
       - ./database/data:/var/lib/postgresql/data
+    restart: on-failure
 
 networks:
   custom_user_network:
