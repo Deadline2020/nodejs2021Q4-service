@@ -2,8 +2,7 @@ import { randomUUID } from 'crypto';
 
 import * as boardsRepo from './board.memory.repository';
 import * as tasksService from '../tasks/task.service';
-import { Board, Column } from './board.model';
-import { Task } from '../tasks/task.model';
+import { Board, Column, Task } from '../../common/types';
 
 /**
  * The function returns all board records from the database
@@ -18,7 +17,8 @@ export const getAllBoards = (): Board[] => boardsRepo.getAllBoards();
  * @param boardId - board ID
  * @returns The board record if the record was found or `undefined` if not
  */
-export const getBoard = (boardId: string): Board | undefined => boardsRepo.getBoard(boardId);
+export const getBoard = (boardId: string): Board | undefined =>
+  boardsRepo.getBoard(boardId);
 
 /**
  * The function of creating a board record in the database
@@ -35,7 +35,7 @@ export const addBoard = (body: Board): Board => {
       newColumn.id = randomUUID();
 
       return newColumn;
-    },
+    }
   );
 
   board.id = randomUUID();
@@ -54,7 +54,7 @@ export const addBoard = (body: Board): Board => {
  */
 export const updateBoard = (
   body: Board,
-  boardId: string,
+  boardId: string
 ): Board | undefined => {
   const indexDB: number = boardsRepo.getIndexDB(boardId);
 

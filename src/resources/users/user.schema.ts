@@ -1,13 +1,6 @@
 import { FastifySchema } from 'fastify';
 
-export interface User {
-  id?: string;
-  name: string;
-  login: string;
-  password?: string;
-}
-
-interface UserModel {
+interface UserData {
   type: string;
   required?: string[];
   properties: {
@@ -20,14 +13,14 @@ interface UserSchema extends FastifySchema {
     params?: {
       userId: { type: string };
     };
-    body?: UserModel;
+    body?: UserData;
     response?: {
-      [key: number]: UserModel | { type: string; items: UserModel };
+      [key: number]: UserData | { type: string; items: UserData };
     };
   };
 }
 
-const viewModel: UserModel = {
+const viewModel: UserData = {
   type: 'object',
   required: ['name'],
   properties: {
@@ -37,7 +30,7 @@ const viewModel: UserModel = {
   },
 };
 
-const bodyModel: UserModel = {
+const bodyModel: UserData = {
   type: 'object',
   required: ['name'],
   properties: {

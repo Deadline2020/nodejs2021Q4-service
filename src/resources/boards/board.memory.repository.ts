@@ -1,4 +1,4 @@
-import { Board } from './board.model';
+import { Board } from '../../common/types';
 
 const boardDB: Board[] = [];
 
@@ -15,7 +15,8 @@ export const getAllBoards = (): Board[] => boardDB;
  * @param boardId - board ID
  * @returns The board record if the record was found or `undefined` if not
  */
-export const getBoard = (boardId: string): Board | undefined => boardDB.find((board: Board): boolean => board.id === boardId);
+export const getBoard = (boardId: string): Board | undefined =>
+  boardDB.find((board: Board): boolean => board.id === boardId);
 
 /**
  * The function of creating a board record in the database
@@ -51,7 +52,8 @@ export const removeBoard = (indexDB: number): void => {
  * @param boardId - board ID
  * @returns The index of board record in database if the record was found or `-1` if not
  */
-export const getIndexDB = (boardId: string): number => boardDB.findIndex((board: Board): boolean => board.id === boardId);
+export const getIndexDB = (boardId: string): number =>
+  boardDB.findIndex((board: Board): boolean => board.id === boardId);
 
 /**
  * The function returns the board record with the corresponding index in database

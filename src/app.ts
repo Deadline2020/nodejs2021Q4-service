@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import fastify, { FastifyInstance } from 'fastify';
 
 import userRouter from './resources/users/user.router';

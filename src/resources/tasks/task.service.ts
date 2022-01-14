@@ -1,7 +1,7 @@
 import { randomUUID } from 'crypto';
 
 import * as tasksRepo from './task.memory.repository';
-import { Task } from './task.model';
+import { Task } from '../../common/types';
 
 /**
  * The function returns all task records from the database with the corresponding user ID

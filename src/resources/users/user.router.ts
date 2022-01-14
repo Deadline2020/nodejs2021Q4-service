@@ -6,8 +6,8 @@ import {
 } from 'fastify';
 
 import * as usersService from './user.service';
-import * as usersModel from './user.model';
-import { User } from './user.model';
+import * as usersSchema from './user.schema';
+import { User } from '../../common/types';
 
 interface Params {
   userId: string;
@@ -109,13 +109,13 @@ const removeUser = (req: FastifyRequest, reply: FastifyReply): void => {
 function userRoutes(
   app: FastifyInstance,
   _: FastifyPluginOptions,
-  done: () => void,
+  done: () => void
 ): void {
-  app.get('/users', usersModel.getAllUsers, getAllUsers);
-  app.get('/users/:userId', usersModel.getUser, getUser);
-  app.post('/users', usersModel.addUser, addUser);
-  app.put('/users/:userId', usersModel.updateUser, updateUser);
-  app.delete('/users/:userId', usersModel.removeUser, removeUser);
+  app.get('/users', usersSchema.getAllUsers, getAllUsers);
+  app.get('/users/:userId', usersSchema.getUser, getUser);
+  app.post('/users', usersSchema.addUser, addUser);
+  app.put('/users/:userId', usersSchema.updateUser, updateUser);
+  app.delete('/users/:userId', usersSchema.removeUser, removeUser);
 
   done();
 }

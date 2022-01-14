@@ -48,10 +48,11 @@
     "cross-env": "7.0.3",
     "dotenv": "10.0.0",
     "fastify": "3.24.1",
+    "pg": "^8.7.1",
     "pino": "7.6.1",
     "pino-pretty": "7.3.0",
-    "nodemon": "2.0.15",
-    "ts-node": "10.4.0",
+    "reflect-metadata": "^0.1.13",
+    "typeorm": "^0.2.41",
     "yamljs": "0.3.0"
   },
   "devDependencies": {
@@ -71,8 +72,10 @@
     "husky": "4.3.8",
     "jest": "27.3.1",
     "lint-staged": "12.0.3",
+    "nodemon": "2.0.15",
     "prettier": "2.4.1",
     "supertest": "6.1.6",
+    "ts-node": "10.4.0",
     "typescript": "4.5.2"
   }
 }

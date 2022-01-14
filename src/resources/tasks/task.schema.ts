@@ -1,16 +1,6 @@
 import { FastifySchema } from 'fastify';
 
-export interface Task {
-  id?: string;
-  order: string;
-  title: string;
-  description: string;
-  userId: string | null;
-  boardId: string;
-  columnId: string | null;
-}
-
-interface TaskModel {
+interface TaskData {
   type: string;
   required?: string[];
   properties: {
@@ -24,14 +14,14 @@ interface UserSchema extends FastifySchema {
       boardId: { type: string };
       taskId?: { type: string };
     };
-    body?: TaskModel;
+    body?: TaskData;
     response?: {
-      [key: number]: TaskModel | { type: string; items: TaskModel };
+      [key: number]: TaskData | { type: string; items: TaskData };
     };
   };
 }
 
-const viewModel: TaskModel = {
+const viewModel: TaskData = {
   type: 'object',
   required: ['title', 'order', 'boardId'],
   properties: {
@@ -45,7 +35,7 @@ const viewModel: TaskModel = {
   },
 };
 
-const bodyModel: TaskModel = {
+const bodyModel: TaskData = {
   type: 'object',
   required: ['title', 'order', 'boardId'],
   properties: {

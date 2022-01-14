@@ -1,4 +1,4 @@
-import { Task } from './task.model';
+import { Task } from '../../common/types';
 
 const taskDB: Task[] = [];
 
@@ -8,7 +8,8 @@ const taskDB: Task[] = [];
  * @param userId - user ID
  * @returns The array of task records
  */
-export const getAllTasksByUser = (userId: string): Task[] => taskDB.filter((task: Task): boolean => task.userId === userId);
+export const getAllTasksByUser = (userId: string): Task[] =>
+  taskDB.filter((task: Task): boolean => task.userId === userId);
 
 /**
  * The function returns all task records with the corresponding board ID
@@ -16,7 +17,8 @@ export const getAllTasksByUser = (userId: string): Task[] => taskDB.filter((task
  * @param boardId - board ID
  * @returns The array of task records
  */
-export const getAllTasksByBoard = (boardId: string): Task[] => taskDB.filter((task: Task): boolean => task.boardId === boardId);
+export const getAllTasksByBoard = (boardId: string): Task[] =>
+  taskDB.filter((task: Task): boolean => task.boardId === boardId);
 
 /**
  * The function returns the task record with the corresponding ID
@@ -24,7 +26,8 @@ export const getAllTasksByBoard = (boardId: string): Task[] => taskDB.filter((ta
  * @param taskId - task ID
  * @returns The task record if the record was found or `undefined` if not
  */
-export const getTask = (taskId: string): Task | undefined => taskDB.find((task: Task): boolean => task.id === taskId);
+export const getTask = (taskId: string): Task | undefined =>
+  taskDB.find((task: Task): boolean => task.id === taskId);
 
 /**
  * The function of creating a task record in the database
@@ -60,7 +63,8 @@ export const removeTask = (indexDB: number): void => {
  * @param taskId - task ID
  * @returns The index of task record in database if the record was found or `-1` if not
  */
-export const getIndexDB = (taskId: string): number => taskDB.findIndex((task: Task): boolean => task.id === taskId);
+export const getIndexDB = (taskId: string): number =>
+  taskDB.findIndex((task: Task): boolean => task.id === taskId);
 
 /**
  * The function returns the task record with the corresponding index in database

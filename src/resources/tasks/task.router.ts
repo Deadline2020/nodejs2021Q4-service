@@ -6,8 +6,8 @@ import {
 } from 'fastify';
 
 import * as tasksService from './task.service';
-import * as tasksModel from './task.model';
-import { Task } from './task.model';
+import * as tasksSchema from './task.schema';
+import { Task } from '../../common/types';
 
 interface Params {
   boardId: string;
@@ -115,16 +115,20 @@ const removeTask = (req: FastifyRequest, reply: FastifyReply): void => {
 function taskRoutes(
   app: FastifyInstance,
   _: FastifyPluginOptions,
-  done: () => void,
+  done: () => void
 ): void {
-  app.get('/boards/:boardId/tasks', tasksModel.getAllTasks, getAllTasksByBoard);
-  app.get('/boards/:boardId/tasks/:taskId', tasksModel.getTask, getTask);
-  app.post('/boards/:boardId/tasks', tasksModel.addTask, addTask);
-  app.put('/boards/:boardId/tasks/:taskId', tasksModel.updateTask, updateTask);
+  app.get(
+    '/boards/:boardId/tasks',
+    tasksSchema.getAllTasks,
+    getAllTasksByBoard
+  );
+  app.get('/boards/:boardId/tasks/:taskId', tasksSchema.getTask, getTask);
+  app.post('/boards/:boardId/tasks', tasksSchema.addTask, addTask);
+  app.put('/boards/:boardId/tasks/:taskId', tasksSchema.updateTask, updateTask);
   app.delete(
     '/boards/:boardId/tasks/:taskId',
-    tasksModel.removeTask,
-    removeTask,
+    tasksSchema.removeTask,
+    removeTask
   );
 
   done();

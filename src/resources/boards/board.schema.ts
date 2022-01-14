@@ -1,19 +1,6 @@
 import { FastifySchema } from 'fastify';
 
-export interface Column {
-  id?: string;
-  title: string;
-  order: number;
-}
-
-export interface Board {
-  id?: string;
-  title: string;
-  order: string;
-  columns?: Column[];
-}
-
-interface ColumnModel {
+interface ColumnData {
   type: string;
   required?: string[];
   properties: {
@@ -23,7 +10,7 @@ interface ColumnModel {
   };
 }
 
-interface BoardModel {
+interface BoardData {
   type: string;
   required?: string[];
   properties: {
@@ -31,7 +18,7 @@ interface BoardModel {
     title: { type: string | string[] };
     columns: {
       type: string;
-      items: ColumnModel;
+      items: ColumnData;
     };
   };
 }
@@ -41,14 +28,14 @@ interface BoardSchema extends FastifySchema {
     params?: {
       boardId: { type: string };
     };
-    body?: BoardModel;
+    body?: BoardData;
     response?: {
-      [key: number]: BoardModel | { type: string; items: BoardModel };
+      [key: number]: BoardData | { type: string; items: BoardData };
     };
   };
 }
 
-const viewModel: BoardModel = {
+const viewModel: BoardData = {
   type: 'object',
   required: ['title', 'columns'],
   properties: {
@@ -69,7 +56,7 @@ const viewModel: BoardModel = {
   },
 };
 
-const bodyModel: BoardModel = {
+const bodyModel: BoardData = {
   type: 'object',
   required: ['title', 'columns'],
   properties: {

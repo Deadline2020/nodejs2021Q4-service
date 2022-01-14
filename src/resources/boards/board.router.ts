@@ -6,8 +6,8 @@ import {
 } from 'fastify';
 
 import * as boardsService from './board.service';
-import * as boardsModel from './board.model';
-import { Board } from './board.model';
+import * as boardsSchema from './board.schema';
+import { Board } from '../../common/types';
 
 interface Params {
   boardId: string;
@@ -109,13 +109,13 @@ const removeBoard = (req: FastifyRequest, reply: FastifyReply): void => {
 function boardRoutes(
   app: FastifyInstance,
   _: FastifyPluginOptions,
-  done: () => void,
+  done: () => void
 ): void {
-  app.get('/boards', boardsModel.getAllBoards, getAllBoards);
-  app.get('/boards/:boardId', boardsModel.getBoard, getBoard);
-  app.post('/boards', boardsModel.addBoard, addBoard);
-  app.put('/boards/:boardId', boardsModel.updateBoard, updateBoard);
-  app.delete('/boards/:boardId', boardsModel.removeBoard, removeBoard);
+  app.get('/boards', boardsSchema.getAllBoards, getAllBoards);
+  app.get('/boards/:boardId', boardsSchema.getBoard, getBoard);
+  app.post('/boards', boardsSchema.addBoard, addBoard);
+  app.put('/boards/:boardId', boardsSchema.updateBoard, updateBoard);
+  app.delete('/boards/:boardId', boardsSchema.removeBoard, removeBoard);
 
   done();
 }

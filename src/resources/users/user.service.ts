@@ -2,8 +2,7 @@ import { randomUUID } from 'crypto';
 
 import * as usersRepo from './user.memory.repository';
 import * as tasksService from '../tasks/task.service';
-import { User } from './user.model';
-import { Task } from '../tasks/task.model';
+import { Task, User } from '../../common/types';
 
 /**
  * The function returns all user records from the database
