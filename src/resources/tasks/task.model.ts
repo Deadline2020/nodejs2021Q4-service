@@ -2,6 +2,7 @@ import {
   BaseEntity,
   Column,
   Entity,
+  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -25,11 +26,14 @@ export class Task extends BaseEntity {
   description!: string;
 
   @ManyToOne(() => User, (user) => user.tasks)
+  @JoinColumn({ name: 'userId' })
   userId!: User;
 
   @ManyToOne(() => Board, (board) => board.tasks)
+  @JoinColumn({ name: 'boardId' })
   boardId!: Board;
 
   @ManyToOne(() => Col, (column) => column.tasks)
+  @JoinColumn({ name: 'columnId' })
   columnId!: Col;
 }

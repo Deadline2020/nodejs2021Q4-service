@@ -19,12 +19,12 @@
     "noInlineConfig": true,
     "import/resolver": {
       "node": {
-        "extensions": [".js",".ts"]
+        "extensions": [".js", ".ts"]
       }
     },
-    "node":{
-      "resolvePath":["__dirname"],
-      "tryExtensions":[".js",".ts"]
+    "node": {
+      "resolvePath": ["__dirname"],
+      "tryExtensions": [".js", ".ts"]
     }
   },
   "plugins": ["@typescript-eslint", "eslint-plugin-tsdoc"],

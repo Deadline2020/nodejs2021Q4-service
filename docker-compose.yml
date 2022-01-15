@@ -37,3 +37,7 @@ services:
 networks:
   custom_user_network:
     driver: bridge
+
+volumes:
+  logs:
+  database:
