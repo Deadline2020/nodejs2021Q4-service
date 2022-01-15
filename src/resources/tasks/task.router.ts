@@ -7,7 +7,7 @@ import {
 
 import * as tasksService from './task.service';
 import * as tasksSchema from './task.schema';
-import { Task } from '../../common/types';
+import { ITask } from '../../common/types';
 
 interface Params {
   boardId: string;
@@ -15,7 +15,7 @@ interface Params {
 }
 
 interface Request extends FastifyRequest {
-  body: Task;
+  body: ITask;
 }
 
 /**
@@ -26,7 +26,7 @@ interface Request extends FastifyRequest {
  */
 const getAllTasksByBoard = (req: FastifyRequest, reply: FastifyReply): void => {
   const { boardId } = req.params as Params;
-  const allTasks: Task[] = tasksService.getAllTasksByBoard(boardId);
+  const allTasks: ITask[] = tasksService.getAllTasksByBoard(boardId);
 
   reply.send(allTasks);
 };
@@ -40,7 +40,7 @@ const getAllTasksByBoard = (req: FastifyRequest, reply: FastifyReply): void => {
 const getTask = (req: FastifyRequest, reply: FastifyReply): void => {
   const { boardId } = req.params as Params;
   const { taskId } = req.params as Params;
-  const task: Task | undefined = tasksService.getTask(boardId, taskId);
+  const task: ITask | undefined = tasksService.getTask(boardId, taskId);
 
   if (task) {
     reply.send(task);
@@ -60,7 +60,7 @@ const getTask = (req: FastifyRequest, reply: FastifyReply): void => {
 const addTask = (req: FastifyRequest, reply: FastifyReply): void => {
   const { boardId } = req.params as Params;
   const { body } = req as Request;
-  const task: Task = tasksService.addTask(body, boardId);
+  const task: ITask = tasksService.addTask(body, boardId);
 
   reply.code(201).send(task);
 };
@@ -75,7 +75,11 @@ const updateTask = (req: FastifyRequest, reply: FastifyReply): void => {
   const { boardId } = req.params as Params;
   const { taskId } = req.params as Params;
   const { body } = req as Request;
-  const task: Task | undefined = tasksService.updateTask(body, boardId, taskId);
+  const task: ITask | undefined = tasksService.updateTask(
+    body,
+    boardId,
+    taskId
+  );
 
   if (task) {
     reply.send(task);

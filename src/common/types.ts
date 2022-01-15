@@ -1,13 +1,13 @@
-export interface User {
+export interface IUser {
   id?: string;
   name: string;
   login: string;
   password?: string;
 }
 
-export interface Task {
+export interface ITask {
   id?: string;
-  order: string;
+  order: number;
   title: string;
   description: string;
   userId: string | null;
@@ -15,15 +15,14 @@ export interface Task {
   columnId: string | null;
 }
 
-export interface Column {
+export interface IColumn {
   id?: string;
   title: string;
   order: number;
 }
 
-export interface Board {
+export interface IBoard {
   id?: string;
   title: string;
-  order: string;
-  columns?: Column[];
+  columns?: IColumn[];
 }

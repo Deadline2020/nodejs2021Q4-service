@@ -1,6 +1,6 @@
-import { Task } from '../../common/types';
+import { ITask } from '../../common/types';
 
-const taskDB: Task[] = [];
+const taskDB: ITask[] = [];
 
 /**
  * The function returns all task records with the corresponding user ID
@@ -8,8 +8,8 @@ const taskDB: Task[] = [];
  * @param userId - user ID
  * @returns The array of task records
  */
-export const getAllTasksByUser = (userId: string): Task[] =>
-  taskDB.filter((task: Task): boolean => task.userId === userId);
+export const getAllTasksByUser = (userId: string): ITask[] =>
+  taskDB.filter((task: ITask): boolean => task.userId === userId);
 
 /**
  * The function returns all task records with the corresponding board ID
@@ -17,8 +17,8 @@ export const getAllTasksByUser = (userId: string): Task[] =>
  * @param boardId - board ID
  * @returns The array of task records
  */
-export const getAllTasksByBoard = (boardId: string): Task[] =>
-  taskDB.filter((task: Task): boolean => task.boardId === boardId);
+export const getAllTasksByBoard = (boardId: string): ITask[] =>
+  taskDB.filter((task: ITask): boolean => task.boardId === boardId);
 
 /**
  * The function returns the task record with the corresponding ID
@@ -26,15 +26,15 @@ export const getAllTasksByBoard = (boardId: string): Task[] =>
  * @param taskId - task ID
  * @returns The task record if the record was found or `undefined` if not
  */
-export const getTask = (taskId: string): Task | undefined =>
-  taskDB.find((task: Task): boolean => task.id === taskId);
+export const getTask = (taskId: string): ITask | undefined =>
+  taskDB.find((task: ITask): boolean => task.id === taskId);
 
 /**
  * The function of creating a task record in the database
  *
  * @param task - task data
  */
-export const addTask = (task: Task) => {
+export const addTask = (task: ITask) => {
   taskDB.push(task);
 };
 
@@ -44,7 +44,7 @@ export const addTask = (task: Task) => {
  * @param task - task data
  * @param indexDB - index of task record in database
  */
-export const updateTask = (task: Task, indexDB: number): void => {
+export const updateTask = (task: ITask, indexDB: number): void => {
   taskDB.splice(indexDB, 1, task);
 };
 
@@ -64,7 +64,7 @@ export const removeTask = (indexDB: number): void => {
  * @returns The index of task record in database if the record was found or `-1` if not
  */
 export const getIndexDB = (taskId: string): number =>
-  taskDB.findIndex((task: Task): boolean => task.id === taskId);
+  taskDB.findIndex((task: ITask): boolean => task.id === taskId);
 
 /**
  * The function returns the task record with the corresponding index in database

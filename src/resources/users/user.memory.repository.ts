@@ -1,13 +1,13 @@
-import { User } from '../../common/types';
+import { IUser } from '../../common/types';
 
-const userDB: User[] = [];
+const userDB: IUser[] = [];
 
 /**
  * The function returns all user records from the database
  *
  * @returns The array of user records
  */
-export const getAllUsers = (): User[] => userDB;
+export const getAllUsers = (): IUser[] => userDB;
 
 /**
  * The function returns the user record with the corresponding ID
@@ -15,15 +15,15 @@ export const getAllUsers = (): User[] => userDB;
  * @param userId - user ID
  * @returns The user record if the record was found or `undefined` if not
  */
-export const getUser = (userId: string): User | undefined =>
-  userDB.find((user: User): boolean => user.id === userId);
+export const getUser = (userId: string): IUser | undefined =>
+  userDB.find((user: IUser): boolean => user.id === userId);
 
 /**
  * The function of creating a user record in the database
  *
  * @param user - user data
  */
-export const addUser = (user: User): void => {
+export const addUser = (user: IUser): void => {
   userDB.push(user);
 };
 
@@ -33,7 +33,7 @@ export const addUser = (user: User): void => {
  * @param user - user data
  * @param indexDB - index of user record in database
  */
-export const updateUser = (user: User, indexDB: number): void => {
+export const updateUser = (user: IUser, indexDB: number): void => {
   userDB.splice(indexDB, 1, user);
 };
 
@@ -53,4 +53,4 @@ export const removeUser = (indexDB: number): void => {
  * @returns The index of user record in database if the record was found or `-1` if not
  */
 export const getIndexDB = (userId: string): number =>
-  userDB.findIndex((user: User): boolean => user.id === userId);
+  userDB.findIndex((user: IUser): boolean => user.id === userId);

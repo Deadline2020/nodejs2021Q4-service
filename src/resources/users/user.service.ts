@@ -2,14 +2,14 @@ import { randomUUID } from 'crypto';
 
 import * as usersRepo from './user.memory.repository';
 import * as tasksService from '../tasks/task.service';
-import { Task, User } from '../../common/types';
+import { ITask, IUser } from '../../common/types';
 
 /**
  * The function returns all user records from the database
  *
  * @returns The array of user records
  */
-export const getAllUsers = (): User[] => usersRepo.getAllUsers();
+export const getAllUsers = (): IUser[] => usersRepo.getAllUsers();
 
 /**
  * The function returns the user record with the corresponding ID
@@ -17,7 +17,7 @@ export const getAllUsers = (): User[] => usersRepo.getAllUsers();
  * @param userId - user ID
  * @returns The user record if the record was found or `undefined` if not
  */
-export const getUser = (userId: string): User | undefined =>
+export const getUser = (userId: string): IUser | undefined =>
   usersRepo.getUser(userId);
 
 /**
@@ -26,8 +26,8 @@ export const getUser = (userId: string): User | undefined =>
  * @param body - user data
  * @returns The new user record
  */
-export const addUser = (body: User): User => {
-  const user: User = { ...body };
+export const addUser = (body: IUser): IUser => {
+  const user: IUser = { ...body };
 
   user.id = randomUUID();
   usersRepo.addUser(user);
@@ -42,11 +42,11 @@ export const addUser = (body: User): User => {
  * @param userId - user ID
  * @returns The updated user record if the record was found or `undefined` if not
  */
-export const updateUser = (body: User, userId: string): User | undefined => {
+export const updateUser = (body: IUser, userId: string): IUser | undefined => {
   const indexDB: number = usersRepo.getIndexDB(userId);
 
   if (indexDB !== -1) {
-    const user: User = { ...body };
+    const user: IUser = { ...body };
 
     user.id = userId;
     usersRepo.updateUser(user, indexDB);
@@ -67,10 +67,10 @@ export const removeUser = (userId: string): boolean => {
   const indexDB: number = usersRepo.getIndexDB(userId);
 
   if (indexDB !== -1) {
-    const tasks: Task[] = tasksService.getAllTasksByUser(userId);
+    const tasks: ITask[] = tasksService.getAllTasksByUser(userId);
 
-    tasks.forEach((task: Task) => {
-      const newTask: Task = { ...task };
+    tasks.forEach((task: ITask) => {
+      const newTask: ITask = { ...task };
 
       newTask.userId = null;
       tasksService.updateTask(newTask, newTask.boardId, newTask.id as string);

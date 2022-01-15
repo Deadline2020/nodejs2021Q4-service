@@ -7,14 +7,14 @@ import {
 
 import * as boardsService from './board.service';
 import * as boardsSchema from './board.schema';
-import { Board } from '../../common/types';
+import { IBoard } from '../../common/types';
 
 interface Params {
   boardId: string;
 }
 
 interface Request extends FastifyRequest {
-  body: Board;
+  body: IBoard;
 }
 
 /**
@@ -24,7 +24,7 @@ interface Request extends FastifyRequest {
  * @param reply - http reply object
  */
 const getAllBoards = (_: FastifyRequest, reply: FastifyReply): void => {
-  const allBoards: Board[] = boardsService.getAllBoards();
+  const allBoards: IBoard[] = boardsService.getAllBoards();
 
   reply.send(allBoards);
 };
@@ -37,7 +37,7 @@ const getAllBoards = (_: FastifyRequest, reply: FastifyReply): void => {
  */
 const getBoard = (req: FastifyRequest, reply: FastifyReply): void => {
   const { boardId } = req.params as Params;
-  const board: Board | undefined = boardsService.getBoard(boardId);
+  const board: IBoard | undefined = boardsService.getBoard(boardId);
 
   if (board) {
     reply.send(board);
@@ -56,7 +56,7 @@ const getBoard = (req: FastifyRequest, reply: FastifyReply): void => {
  */
 const addBoard = (req: FastifyRequest, reply: FastifyReply): void => {
   const { body } = req as Request;
-  const board: Board = boardsService.addBoard(body);
+  const board: IBoard = boardsService.addBoard(body);
 
   reply.code(201).send(board);
 };
@@ -70,7 +70,7 @@ const addBoard = (req: FastifyRequest, reply: FastifyReply): void => {
 const updateBoard = (req: FastifyRequest, reply: FastifyReply): void => {
   const { boardId } = req.params as Params;
   const { body } = req as Request;
-  const board: Board | undefined = boardsService.updateBoard(body, boardId);
+  const board: IBoard | undefined = boardsService.updateBoard(body, boardId);
 
   if (board) {
     reply.send(board);

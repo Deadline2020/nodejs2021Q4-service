@@ -1,7 +1,7 @@
 import { randomUUID } from 'crypto';
 
 import * as tasksRepo from './task.memory.repository';
-import { Task } from '../../common/types';
+import { ITask } from '../../common/types';
 
 /**
  * The function returns all task records from the database with the corresponding user ID
@@ -9,7 +9,7 @@ import { Task } from '../../common/types';
  * @param userId - user ID
  * @returns The array of task records
  */
-export const getAllTasksByUser = (userId: string): Task[] =>
+export const getAllTasksByUser = (userId: string): ITask[] =>
   tasksRepo.getAllTasksByUser(userId);
 
 /**
@@ -18,7 +18,7 @@ export const getAllTasksByUser = (userId: string): Task[] =>
  * @param boardId - board ID
  * @returns The array of task records
  */
-export const getAllTasksByBoard = (boardId: string): Task[] =>
+export const getAllTasksByBoard = (boardId: string): ITask[] =>
   tasksRepo.getAllTasksByBoard(boardId);
 
 /**
@@ -28,8 +28,8 @@ export const getAllTasksByBoard = (boardId: string): Task[] =>
  * @param taskId - task ID
  * @returns The task record if the record was found or `undefined` if not
  */
-export const getTask = (boardId: string, taskId: string): Task | undefined => {
-  const task: Task | undefined = tasksRepo.getTask(taskId);
+export const getTask = (boardId: string, taskId: string): ITask | undefined => {
+  const task: ITask | undefined = tasksRepo.getTask(taskId);
 
   return task?.boardId === boardId ? task : undefined;
 };
@@ -41,8 +41,8 @@ export const getTask = (boardId: string, taskId: string): Task | undefined => {
  * @param boardId - board ID
  * @returns The new task record
  */
-export const addTask = (body: Task, boardId: string): Task => {
-  const task: Task = { ...body };
+export const addTask = (body: ITask, boardId: string): ITask => {
+  const task: ITask = { ...body };
 
   task.id = randomUUID();
   task.boardId = boardId;
@@ -60,17 +60,17 @@ export const addTask = (body: Task, boardId: string): Task => {
  * @returns The updated task record if the record was found or `undefined` if not
  */
 export const updateTask = (
-  body: Task,
+  body: ITask,
   boardId: string,
   taskId: string
-): Task | undefined => {
+): ITask | undefined => {
   const indexDB: number = tasksRepo.getIndexDB(taskId);
 
   if (indexDB !== -1) {
-    let task: Task = tasksRepo.getTaskByIndexDB(indexDB);
+    let task: ITask = tasksRepo.getTaskByIndexDB(indexDB);
 
     if (task.boardId === boardId) {
-      const newData: Task = { ...body };
+      const newData: ITask = { ...body };
 
       task = { ...task, ...newData };
       tasksRepo.updateTask(task, indexDB);
@@ -93,7 +93,7 @@ export const removeTask = (boardId: string, taskId: string): boolean => {
   const indexDB: number = tasksRepo.getIndexDB(taskId);
 
   if (indexDB !== -1) {
-    const task: Task = tasksRepo.getTaskByIndexDB(indexDB);
+    const task: ITask = tasksRepo.getTaskByIndexDB(indexDB);
 
     if (task.boardId === boardId) {
       tasksRepo.removeTask(indexDB);

@@ -7,14 +7,14 @@ import {
 
 import * as usersService from './user.service';
 import * as usersSchema from './user.schema';
-import { User } from '../../common/types';
+import { IUser } from '../../common/types';
 
 interface Params {
   userId: string;
 }
 
 interface Request extends FastifyRequest {
-  body: User;
+  body: IUser;
 }
 
 /**
@@ -24,7 +24,7 @@ interface Request extends FastifyRequest {
  * @param reply - http reply object
  */
 const getAllUsers = (_: FastifyRequest, reply: FastifyReply): void => {
-  const allUsers: User[] = usersService.getAllUsers();
+  const allUsers: IUser[] = usersService.getAllUsers();
 
   reply.send(allUsers);
 };
@@ -37,7 +37,7 @@ const getAllUsers = (_: FastifyRequest, reply: FastifyReply): void => {
  */
 const getUser = (req: FastifyRequest, reply: FastifyReply): void => {
   const { userId } = req.params as Params;
-  const user: User | undefined = usersService.getUser(userId);
+  const user: IUser | undefined = usersService.getUser(userId);
 
   if (user) {
     reply.send(user);
@@ -56,7 +56,7 @@ const getUser = (req: FastifyRequest, reply: FastifyReply): void => {
  */
 const addUser = (req: FastifyRequest, reply: FastifyReply): void => {
   const { body } = req as Request;
-  const user: User = usersService.addUser(body);
+  const user: IUser = usersService.addUser(body);
 
   reply.code(201).send(user);
 };
@@ -70,7 +70,7 @@ const addUser = (req: FastifyRequest, reply: FastifyReply): void => {
 const updateUser = (req: FastifyRequest, reply: FastifyReply): void => {
   const { userId } = req.params as Params;
   const { body } = req as Request;
-  const user: User | undefined = usersService.updateUser(body, userId);
+  const user: IUser | undefined = usersService.updateUser(body, userId);
 
   if (user) {
     reply.send(user);

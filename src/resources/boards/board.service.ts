@@ -2,14 +2,14 @@ import { randomUUID } from 'crypto';
 
 import * as boardsRepo from './board.memory.repository';
 import * as tasksService from '../tasks/task.service';
-import { Board, Column, Task } from '../../common/types';
+import { IBoard, IColumn, ITask } from '../../common/types';
 
 /**
  * The function returns all board records from the database
  *
  * @returns The array of board records
  */
-export const getAllBoards = (): Board[] => boardsRepo.getAllBoards();
+export const getAllBoards = (): IBoard[] => boardsRepo.getAllBoards();
 
 /**
  * The function returns the board record with the corresponding ID
@@ -17,7 +17,7 @@ export const getAllBoards = (): Board[] => boardsRepo.getAllBoards();
  * @param boardId - board ID
  * @returns The board record if the record was found or `undefined` if not
  */
-export const getBoard = (boardId: string): Board | undefined =>
+export const getBoard = (boardId: string): IBoard | undefined =>
   boardsRepo.getBoard(boardId);
 
 /**
@@ -26,11 +26,11 @@ export const getBoard = (boardId: string): Board | undefined =>
  * @param body - board data
  * @returns The new board record
  */
-export const addBoard = (body: Board): Board => {
-  const board: Board = { ...body };
-  const columns: Column[] = (board.columns as Column[]).map(
-    (column: Column) => {
-      const newColumn: Column = { ...column };
+export const addBoard = (body: IBoard): IBoard => {
+  const board: IBoard = { ...body };
+  const columns: IColumn[] = (board.columns as IColumn[]).map(
+    (column: IColumn) => {
+      const newColumn: IColumn = { ...column };
 
       newColumn.id = randomUUID();
 
@@ -53,14 +53,14 @@ export const addBoard = (body: Board): Board => {
  * @returns The updated board record if the record was found or `undefined` if not
  */
 export const updateBoard = (
-  body: Board,
+  body: IBoard,
   boardId: string
-): Board | undefined => {
+): IBoard | undefined => {
   const indexDB: number = boardsRepo.getIndexDB(boardId);
 
   if (indexDB !== -1) {
-    let board: Board = boardsRepo.getBoardByIndexDB(indexDB);
-    const newData: Board = { ...body };
+    let board: IBoard = boardsRepo.getBoardByIndexDB(indexDB);
+    const newData: IBoard = { ...body };
 
     delete newData.columns;
     board = { ...board, ...newData };
@@ -82,9 +82,9 @@ export const removeBoard = (boardId: string): boolean => {
   const indexDB: number = boardsRepo.getIndexDB(boardId);
 
   if (indexDB !== -1) {
-    const tasks: Task[] = tasksService.getAllTasksByBoard(boardId);
+    const tasks: ITask[] = tasksService.getAllTasksByBoard(boardId);
 
-    tasks.forEach((task: Task) => {
+    tasks.forEach((task: ITask) => {
       tasksService.removeTask(boardId, task.id as string);
     });
     boardsRepo.removeBoard(indexDB);
