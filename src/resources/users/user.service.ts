@@ -1,4 +1,4 @@
-import { v4 as uuid } from 'uuid';
+import { randomUUID } from 'crypto';
 
 import * as usersRepo from './user.memory.repository';
 import * as tasksService from '../tasks/task.service';
@@ -30,7 +30,7 @@ export const getUser = (userId: string): User | undefined =>
 export const addUser = (body: User): User => {
   const user: User = { ...body };
 
-  user.id = uuid();
+  user.id = randomUUID();
   usersRepo.addUser(user);
 
   return user;

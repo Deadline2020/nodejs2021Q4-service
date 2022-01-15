@@ -109,7 +109,7 @@ const removeUser = (req: FastifyRequest, reply: FastifyReply): void => {
 function userRoutes(
   app: FastifyInstance,
   _: FastifyPluginOptions,
-  done: () => void
+  done: () => void,
 ): void {
   app.get('/users', usersModel.getAllUsers, getAllUsers);
   app.get('/users/:userId', usersModel.getUser, getUser);

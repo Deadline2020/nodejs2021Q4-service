@@ -28,10 +28,10 @@ const setHandlers = (app: FastifyInstance): void => {
           queryParams: req.query,
           body: req.body,
         },
-        'received request'
+        'received request',
       );
       done();
-    }
+    },
   );
 
   app.addHook(
@@ -51,7 +51,7 @@ const setHandlers = (app: FastifyInstance): void => {
         reply.log.info(replyLogMessage, 'sent response');
       }
       done();
-    }
+    },
   );
 
   app.setErrorHandler(
@@ -67,7 +67,7 @@ const setHandlers = (app: FastifyInstance): void => {
           message: 'Internal Server Error',
         });
       }
-    }
+    },
   );
 
   process.on('uncaughtException', (error: Error): void => {
@@ -76,7 +76,7 @@ const setHandlers = (app: FastifyInstance): void => {
         statusCode: '500',
         message: 'Internal Server Error',
       },
-      error.message
+      error.message,
     );
 
     setTimeout(() => {
@@ -90,7 +90,7 @@ const setHandlers = (app: FastifyInstance): void => {
         statusCode: '500',
         message: 'Internal Server Error',
       },
-      reason.message
+      reason.message,
     );
 
     setTimeout(() => {

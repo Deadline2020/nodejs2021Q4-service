@@ -1,0 +1,39 @@
+version: '3.0'
+
+services:
+
+  server:
+    image: app_server
+    build: .
+    ports:
+      - ${PORT}:${PORT}
+    environment:
+      PORT: ${PORT}
+    depends_on:
+      - database
+    networks:
+      - custom_user_network
+    volumes:
+      - ./logs:/usr/app/logs
+      - ./src:/usr/app/src
+    restart: on-failure
+
+  database:
+    image: postgres_database
+    build: ./database/
+    ports:
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    environment:
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      POSTGRES_USER: ${POSTGRES_USER} 
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD} 
+      POSTGRES_DB: ${POSTGRES_DB} 
+    networks:
+      - custom_user_network
+    volumes:
+      - ./database/data:/var/lib/postgresql/data
+    restart: on-failure
+
+networks:
+  custom_user_network:
+    driver: bridge

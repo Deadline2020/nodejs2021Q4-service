@@ -115,7 +115,7 @@ const removeTask = (req: FastifyRequest, reply: FastifyReply): void => {
 function taskRoutes(
   app: FastifyInstance,
   _: FastifyPluginOptions,
-  done: () => void
+  done: () => void,
 ): void {
   app.get('/boards/:boardId/tasks', tasksModel.getAllTasks, getAllTasksByBoard);
   app.get('/boards/:boardId/tasks/:taskId', tasksModel.getTask, getTask);
@@ -124,7 +124,7 @@ function taskRoutes(
   app.delete(
     '/boards/:boardId/tasks/:taskId',
     tasksModel.removeTask,
-    removeTask
+    removeTask,
   );
 
   done();

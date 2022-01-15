@@ -109,7 +109,7 @@ const removeBoard = (req: FastifyRequest, reply: FastifyReply): void => {
 function boardRoutes(
   app: FastifyInstance,
   _: FastifyPluginOptions,
-  done: () => void
+  done: () => void,
 ): void {
   app.get('/boards', boardsModel.getAllBoards, getAllBoards);
   app.get('/boards/:boardId', boardsModel.getBoard, getBoard);
