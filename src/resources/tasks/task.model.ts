@@ -2,7 +2,6 @@ import {
   BaseEntity,
   Column,
   Entity,
-  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -25,15 +24,28 @@ export class Task extends BaseEntity {
   @Column({ type: 'varchar', length: 100 })
   description!: string;
 
-  @ManyToOne(() => User, (user) => user.tasks)
-  @JoinColumn({ name: 'userId' })
-  userId!: User;
+  @Column({ nullable: true })
+  userId!: string | null;
 
-  @ManyToOne(() => Board, (board) => board.tasks)
-  @JoinColumn({ name: 'boardId' })
-  boardId!: Board;
+  @ManyToOne(() => User, (user) => user.tasks, {
+    onDelete: 'SET NULL',
+    nullable: true,
+  })
+  user!: User | null;
 
-  @ManyToOne(() => Col, (column) => column.tasks)
-  @JoinColumn({ name: 'columnId' })
-  columnId!: Col;
+  @Column({ nullable: true })
+  boardId!: string | null;
+
+  @ManyToOne(() => Board, (board) => board.tasks, {
+    onDelete: 'CASCADE',
+  })
+  board!: Board | null;
+
+  @Column({ nullable: true })
+  columnId!: string | null;
+
+  @ManyToOne(() => Col, (column) => column.tasks, {
+    nullable: true,
+  })
+  column!: Col | null;
 }

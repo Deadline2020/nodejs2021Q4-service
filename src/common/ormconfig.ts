@@ -3,8 +3,6 @@ import { ConnectionOptions } from 'typeorm';
 import dotenv from 'dotenv';
 import path from 'path';
 
-// import { IConfig } from './types';
-
 dotenv.config({
   path: path.join(__dirname, '../../.env'),
 });
@@ -18,6 +16,7 @@ const typeORMConfig: ConnectionOptions = {
   database: process.env.POSTGRES_DB,
   entities: ['src/resources/**/*.model{.ts,.js}'],
   synchronize: false,
+  migrationsRun: true,
   migrations: ['database/migration/**/*{.ts,.js}'],
   cli: {
     migrationsDir: 'database/migration',

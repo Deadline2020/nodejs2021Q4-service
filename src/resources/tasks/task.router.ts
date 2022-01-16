@@ -8,6 +8,7 @@ import {
 import * as tasksService from './task.service';
 import * as tasksSchema from './task.schema';
 import { ITask } from '../../common/types';
+import { Task } from './task.model';
 
 interface Params {
   boardId: string;
@@ -24,9 +25,12 @@ interface Request extends FastifyRequest {
  * @param req - http request object
  * @param reply - http reply object
  */
-const getAllTasksByBoard = (req: FastifyRequest, reply: FastifyReply): void => {
+const getAllTasksByBoard = async (
+  req: FastifyRequest,
+  reply: FastifyReply
+): Promise<void> => {
   const { boardId } = req.params as Params;
-  const allTasks: ITask[] = tasksService.getAllTasksByBoard(boardId);
+  const allTasks: Task[] = await tasksService.getAllTasksByBoard(boardId);
 
   reply.send(allTasks);
 };
@@ -37,10 +41,12 @@ const getAllTasksByBoard = (req: FastifyRequest, reply: FastifyReply): void => {
  * @param req - http request object
  * @param reply - http reply object
  */
-const getTask = (req: FastifyRequest, reply: FastifyReply): void => {
-  const { boardId } = req.params as Params;
+const getTask = async (
+  req: FastifyRequest,
+  reply: FastifyReply
+): Promise<void> => {
   const { taskId } = req.params as Params;
-  const task: ITask | undefined = tasksService.getTask(boardId, taskId);
+  const task: Task | undefined = await tasksService.getTask(taskId);
 
   if (task) {
     reply.send(task);
@@ -57,10 +63,13 @@ const getTask = (req: FastifyRequest, reply: FastifyReply): void => {
  * @param req - http request object
  * @param reply - http reply object
  */
-const addTask = (req: FastifyRequest, reply: FastifyReply): void => {
+const addTask = async (
+  req: FastifyRequest,
+  reply: FastifyReply
+): Promise<void> => {
   const { boardId } = req.params as Params;
   const { body } = req as Request;
-  const task: ITask = tasksService.addTask(body, boardId);
+  const task: Task = await tasksService.addTask(body as Task, boardId);
 
   reply.code(201).send(task);
 };
@@ -71,13 +80,14 @@ const addTask = (req: FastifyRequest, reply: FastifyReply): void => {
  * @param req - http request object
  * @param reply - http reply object
  */
-const updateTask = (req: FastifyRequest, reply: FastifyReply): void => {
-  const { boardId } = req.params as Params;
+const updateTask = async (
+  req: FastifyRequest,
+  reply: FastifyReply
+): Promise<void> => {
   const { taskId } = req.params as Params;
   const { body } = req as Request;
-  const task: ITask | undefined = tasksService.updateTask(
-    body,
-    boardId,
+  const task: Task | undefined = await tasksService.updateTask(
+    body as Task,
     taskId
   );
 
@@ -96,11 +106,13 @@ const updateTask = (req: FastifyRequest, reply: FastifyReply): void => {
  * @param req - http request object
  * @param reply - http reply object
  */
-const removeTask = (req: FastifyRequest, reply: FastifyReply): void => {
-  const { boardId } = req.params as Params;
+const removeTask = async (
+  req: FastifyRequest,
+  reply: FastifyReply
+): Promise<void> => {
   const { taskId } = req.params as Params;
 
-  if (tasksService.removeTask(boardId, taskId)) {
+  if (await tasksService.removeTask(taskId)) {
     reply.code(204).send();
   } else {
     reply.status(404).send({

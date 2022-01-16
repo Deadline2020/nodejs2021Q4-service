@@ -1,13 +1,11 @@
-import { IUser } from '../../common/types';
-
-const userDB: IUser[] = [];
+import { User } from './user.model';
 
 /**
  * The function returns all user records from the database
  *
  * @returns The array of user records
  */
-export const getAllUsers = (): IUser[] => userDB;
+export const getAllUsers = async (): Promise<User[]> => User.find();
 
 /**
  * The function returns the user record with the corresponding ID
@@ -15,42 +13,58 @@ export const getAllUsers = (): IUser[] => userDB;
  * @param userId - user ID
  * @returns The user record if the record was found or `undefined` if not
  */
-export const getUser = (userId: string): IUser | undefined =>
-  userDB.find((user: IUser): boolean => user.id === userId);
+export const getUser = async (userId: string): Promise<User | undefined> =>
+  User.findOne(userId);
 
 /**
  * The function of creating a user record in the database
  *
  * @param user - user data
  */
-export const addUser = (user: IUser): void => {
-  userDB.push(user);
+export const addUser = async (user: User): Promise<User> => {
+  const newUser = new User();
+
+  newUser.name = user.name;
+  newUser.login = user.login;
+  newUser.password = user.password;
+
+  await newUser.save();
+
+  return newUser;
 };
 
 /**
  * The function of updating the user record in the database
  *
  * @param user - user data
- * @param indexDB - index of user record in database
+ * @param id - user id
  */
-export const updateUser = (user: IUser, indexDB: number): void => {
-  userDB.splice(indexDB, 1, user);
+export const updateUser = async (
+  userData: User,
+  id: string
+): Promise<User | undefined> => {
+  const user = await getUser(id);
+
+  if (user) {
+    User.merge(user, userData);
+    await user.save();
+    return user;
+  }
+
+  return undefined;
 };
 
 /**
  * The function of deleting the user record from the database
  *
- * @param indexDB - index of user record in database
+ * @param id - user id
  */
-export const removeUser = (indexDB: number): void => {
-  userDB.splice(indexDB, 1);
-};
+export const removeUser = async (id: string): Promise<User | undefined> => {
+  const user = await getUser(id);
 
-/**
- * The function returns the index of user record in database
- *
- * @param userId - user ID
- * @returns The index of user record in database if the record was found or `-1` if not
- */
-export const getIndexDB = (userId: string): number =>
-  userDB.findIndex((user: IUser): boolean => user.id === userId);
+  if (user) {
+    return User.remove(user);
+  }
+
+  return undefined;
+};

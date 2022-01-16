@@ -17,9 +17,14 @@ export class Board extends BaseEntity {
   @Column({ type: 'varchar', length: 30 })
   title!: string;
 
-  @OneToMany(() => Col, (column) => column.board)
+  @OneToMany(() => Col, (column) => column.board, {
+    eager: true,
+    cascade: true,
+  })
   columns!: Col[];
 
-  @OneToMany(() => Task, (task) => task.boardId)
+  @OneToMany(() => Task, (task) => task.boardId, {
+    cascade: true,
+  })
   tasks!: Task[];
 }

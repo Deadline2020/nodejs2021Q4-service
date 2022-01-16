@@ -21,9 +21,14 @@ export class Col extends BaseEntity {
   @Column({ type: 'smallint' })
   order!: number;
 
-  @ManyToOne(() => Board, (board) => board.columns)
+  @ManyToOne(() => Board, (board) => board.columns, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   board!: Board;
 
-  @OneToMany(() => Task, (task) => task.boardId)
+  @OneToMany(() => Task, (task) => task.boardId, {
+    cascade: true,
+  })
   tasks!: Task[];
 }

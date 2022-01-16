@@ -8,6 +8,7 @@ import {
 import * as usersService from './user.service';
 import * as usersSchema from './user.schema';
 import { IUser } from '../../common/types';
+import { User } from './user.model';
 
 interface Params {
   userId: string;
@@ -23,8 +24,11 @@ interface Request extends FastifyRequest {
  * @param _ - http request object (not used)
  * @param reply - http reply object
  */
-const getAllUsers = (_: FastifyRequest, reply: FastifyReply): void => {
-  const allUsers: IUser[] = usersService.getAllUsers();
+const getAllUsers = async (
+  _: FastifyRequest,
+  reply: FastifyReply
+): Promise<void> => {
+  const allUsers: User[] = await usersService.getAllUsers();
 
   reply.send(allUsers);
 };
@@ -35,9 +39,12 @@ const getAllUsers = (_: FastifyRequest, reply: FastifyReply): void => {
  * @param req - http request object
  * @param reply - http reply object
  */
-const getUser = (req: FastifyRequest, reply: FastifyReply): void => {
+const getUser = async (
+  req: FastifyRequest,
+  reply: FastifyReply
+): Promise<void> => {
   const { userId } = req.params as Params;
-  const user: IUser | undefined = usersService.getUser(userId);
+  const user: User | undefined = await usersService.getUser(userId);
 
   if (user) {
     reply.send(user);
@@ -54,9 +61,12 @@ const getUser = (req: FastifyRequest, reply: FastifyReply): void => {
  * @param req - http request object
  * @param reply - http reply object
  */
-const addUser = (req: FastifyRequest, reply: FastifyReply): void => {
+const addUser = async (
+  req: FastifyRequest,
+  reply: FastifyReply
+): Promise<void> => {
   const { body } = req as Request;
-  const user: IUser = usersService.addUser(body);
+  const user: User = await usersService.addUser(body as User);
 
   reply.code(201).send(user);
 };
@@ -67,10 +77,16 @@ const addUser = (req: FastifyRequest, reply: FastifyReply): void => {
  * @param req - http request object
  * @param reply - http reply object
  */
-const updateUser = (req: FastifyRequest, reply: FastifyReply): void => {
+const updateUser = async (
+  req: FastifyRequest,
+  reply: FastifyReply
+): Promise<void> => {
   const { userId } = req.params as Params;
   const { body } = req as Request;
-  const user: IUser | undefined = usersService.updateUser(body, userId);
+  const user: User | undefined = await usersService.updateUser(
+    body as User,
+    userId
+  );
 
   if (user) {
     reply.send(user);
@@ -87,10 +103,13 @@ const updateUser = (req: FastifyRequest, reply: FastifyReply): void => {
  * @param req - http request object
  * @param reply - http reply object
  */
-const removeUser = (req: FastifyRequest, reply: FastifyReply): void => {
+const removeUser = async (
+  req: FastifyRequest,
+  reply: FastifyReply
+): Promise<void> => {
   const { userId } = req.params as Params;
 
-  if (usersService.removeUser(userId)) {
+  if (await usersService.removeUser(userId)) {
     reply.code(204).send();
   } else {
     reply.status(404).send({
