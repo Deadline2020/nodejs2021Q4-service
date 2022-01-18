@@ -23,7 +23,7 @@ export const getBoard = (boardId: string): Promise<Board | undefined> =>
  * @param body - board data
  * @returns The new board record
  */
-export const addBoard = (body: Board): Promise<Board> =>
+export const addBoard = (body: Board): Promise<Board | undefined> =>
   boardsRepo.addBoard(body);
 
 /**

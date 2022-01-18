@@ -1,4 +1,3 @@
-
 import { Col } from '../columns/column.model';
 import { Board } from './board.model';
 
@@ -7,7 +6,11 @@ import { Board } from './board.model';
  *
  * @returns The array of board records
  */
-export const getAllBoards = async (): Promise<Board[]> => Board.find();
+export const getAllBoards = async (): Promise<Board[]> =>
+  Board.createQueryBuilder('board')
+    .leftJoinAndSelect('board.columns', 'column')
+    .orderBy('column.order', 'ASC')
+    .getMany();
 
 /**
  * The function returns the board record with the corresponding ID
@@ -16,21 +19,25 @@ export const getAllBoards = async (): Promise<Board[]> => Board.find();
  * @returns The board record if the record was found or `undefined` if not
  */
 export const getBoard = async (boardId: string): Promise<Board | undefined> =>
-  Board.findOne(boardId);
+  Board.createQueryBuilder('board')
+    .where('board.id=:id', { id: boardId })
+    .leftJoinAndSelect('board.columns', 'column')
+    .orderBy('column.order', 'ASC')
+    .getOne();
 
 /**
  * The function of creating a board record in the database
  *
  * @param board - board data
  */
-export const addBoard = async (board: Board): Promise<Board> => {
+export const addBoard = async (board: Board): Promise<Board | undefined> => {
   const newBoard = new Board();
   newBoard.title = board.title;
   await newBoard.save();
 
   const columns: Col[] = [];
 
-  (board.columns).forEach(async (column) => {
+  board.columns.forEach(async (column) => {
     const newColumn = new Col();
     newColumn.title = column.title;
     newColumn.order = column.order;
@@ -40,11 +47,11 @@ export const addBoard = async (board: Board): Promise<Board> => {
 
   await Promise.all(columns.map((column: Col) => column.save()));
 
-  const resultBoard: Board = (await Board.findOne(newBoard.id, {
-    relations: ['columns'],
-  })) as Board;
-
-  return resultBoard;
+  return Board.createQueryBuilder('board')
+    .where('board.id=:id', { id: newBoard.id })
+    .leftJoinAndSelect('board.columns', 'column')
+    .orderBy('column.order', 'ASC')
+    .getOne();
 };
 
 /**

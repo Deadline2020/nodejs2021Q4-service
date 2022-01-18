@@ -47,9 +47,6 @@ const getBoard = async (
   const board: Board | undefined = await boardsService.getBoard(boardId);
 
   if (board) {
-    if (board.columns.length) {
-      board.columns.sort((a, b) => a.order - b.order);
-    }
     reply.send(board);
   } else {
     reply.status(404).send({
@@ -69,10 +66,7 @@ const addBoard = async (
   reply: FastifyReply
 ): Promise<void> => {
   const { body } = req as Request;
-  const board: Board = await boardsService.addBoard(body as Board);
-  if (board.columns.length) {
-    board.columns.sort((a, b) => a.order - b.order);
-  }
+  const board: Board = (await boardsService.addBoard(body as Board)) as Board;
   reply.code(201).send(board);
 };
 
