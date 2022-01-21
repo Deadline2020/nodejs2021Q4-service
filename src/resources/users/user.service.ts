@@ -15,7 +15,7 @@ export const getAllUsers = (): Promise<User[]> => usersRepo.getAllUsers();
  * @returns The user record if the record was found or `undefined` if not
  */
 export const getUser = (userId: string): Promise<User | undefined> =>
-  usersRepo.getUser(userId);
+  usersRepo.getUserById(userId);
 
 /**
  * The function of creating a user record in the database
