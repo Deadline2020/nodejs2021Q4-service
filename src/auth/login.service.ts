@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
 
 import * as usersRepo from '../resources/users/user.memory.repository';
 import { User } from '../resources/users/user.model';
@@ -19,7 +20,7 @@ export const getToken = async (
   let token: string | undefined;
 
   if (user) {
-    const isCorrectPassword = user.password === password;
+    const isCorrectPassword = await bcrypt.compare(password, user.password);
 
     if (isCorrectPassword) {
       const payload = { userId: user.id, login: user.login };

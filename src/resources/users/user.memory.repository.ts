@@ -1,3 +1,4 @@
+import getHash from '../../auth/getHash';
 import { User } from './user.model';
 
 /**
@@ -16,14 +17,15 @@ export const getAllUsers = async (): Promise<User[]> => User.find();
 export const getUserById = async (userId: string): Promise<User | undefined> =>
   User.findOne(userId);
 
-  /**
+/**
  * The function returns the user record with the corresponding login
  *
  * @param login - user login
  * @returns The user record if the record was found or `undefined` if not
  */
-export const getUserByLogin = async (login: string): Promise<User | undefined> =>
-  User.findOne({where: {login}});
+export const getUserByLogin = async (
+  login: string
+): Promise<User | undefined> => User.findOne({ where: { login } });
 
 /**
  * The function of creating a user record in the database
@@ -35,7 +37,7 @@ export const addUser = async (user: User): Promise<User> => {
 
   newUser.name = user.name;
   newUser.login = user.login;
-  newUser.password = user.password;
+  newUser.password = await getHash(user.password);
 
   await newUser.save();
 
@@ -55,7 +57,9 @@ export const updateUser = async (
   const user = await getUserById(id);
 
   if (user) {
-    User.merge(user, userData);
+    const newUser = { ...userData };
+    newUser.password = await getHash(userData.password);
+    User.merge(user, newUser);
     await user.save();
     return user;
   }

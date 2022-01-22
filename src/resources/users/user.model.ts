@@ -19,7 +19,7 @@ export class User extends BaseEntity {
   @Column({ type: 'varchar', length: 20 })
   login!: string;
 
-  @Column({ type: 'varchar', length: 20 })
+  @Column({ type: 'varchar', length: 100 })
   password!: string;
 
   @OneToMany(() => Task, (task) => task.userId)
