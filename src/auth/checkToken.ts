@@ -37,6 +37,3 @@ const checkToken = (req: FastifyRequest, reply: FastifyReply): void => {
 };
 
 export default checkToken;
-
-// 7da0b2c1-b34d-4ecf-ac8e-97dcb08b5d73
-// $2b$10$UJ8Hr9F82OJ2vmoRNJYbL.eYMwjUO.sNMzGrrcXrbLg6y.XsfoPte
