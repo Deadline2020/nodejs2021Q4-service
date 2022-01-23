@@ -81,3 +81,26 @@ export const removeUser = async (id: string): Promise<User | undefined> => {
 
   return undefined;
 };
+
+/**
+ * The function of creating  the default admin record in the database
+ *
+ * @param login - admin login
+ * @param password - admin password
+ */
+export const setDefaultAdmin = async (
+  login: string,
+  password: string
+): Promise<void> => {
+  const user = await getUserByLogin(login);
+
+  if (!user) {
+    const newUser = new User();
+
+    newUser.name = login;
+    newUser.login = login;
+    newUser.password = await getHash(password);
+
+    await newUser.save();
+  }
+};
