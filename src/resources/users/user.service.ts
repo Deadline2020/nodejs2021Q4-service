@@ -15,7 +15,7 @@ export const getAllUsers = (): Promise<User[]> => usersRepo.getAllUsers();
  * @returns The user record if the record was found or `undefined` if not
  */
 export const getUser = (userId: string): Promise<User | undefined> =>
-  usersRepo.getUser(userId);
+  usersRepo.getUserById(userId);
 
 /**
  * The function of creating a user record in the database
@@ -45,3 +45,14 @@ export const updateUser = (
  */
 export const removeUser = (userId: string): Promise<User | undefined> =>
   usersRepo.removeUser(userId);
+
+/**
+ * The function of creating the default admin record in the database
+ *
+ * @param login - admin login
+ * @param password - admin password
+ */
+export const setDefaultAdmin = (
+  login: string,
+  password: string
+): Promise<void> => usersRepo.setDefaultAdmin(login, password);
