@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import {
   BaseEntity,
   Column,
@@ -20,6 +21,7 @@ export class User extends BaseEntity {
   login!: string;
 
   @Column({ type: 'varchar', length: 100 })
+  @Exclude({ toPlainOnly: true })
   password!: string;
 
   @OneToMany(() => Task, (task) => task.userId)
