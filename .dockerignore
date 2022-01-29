@@ -1,7 +1,6 @@
 .git
 .vscode
 .github
-database
 doc
 node_modules
 coverage

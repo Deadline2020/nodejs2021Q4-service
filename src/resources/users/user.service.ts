@@ -1,16 +1,12 @@
-import { randomUUID } from 'crypto';
-
 import * as usersRepo from './user.memory.repository';
-import * as tasksService from '../tasks/task.service';
 import { User } from './user.model';
-import { Task } from '../tasks/task.model';
 
 /**
  * The function returns all user records from the database
  *
  * @returns The array of user records
  */
-export const getAllUsers = (): User[] => usersRepo.getAllUsers();
+export const getAllUsers = (): Promise<User[]> => usersRepo.getAllUsers();
 
 /**
  * The function returns the user record with the corresponding ID
@@ -18,7 +14,7 @@ export const getAllUsers = (): User[] => usersRepo.getAllUsers();
  * @param userId - user ID
  * @returns The user record if the record was found or `undefined` if not
  */
-export const getUser = (userId: string): User | undefined =>
+export const getUser = (userId: string): Promise<User | undefined> =>
   usersRepo.getUser(userId);
 
 /**
@@ -27,14 +23,7 @@ export const getUser = (userId: string): User | undefined =>
  * @param body - user data
  * @returns The new user record
  */
-export const addUser = (body: User): User => {
-  const user: User = { ...body };
-
-  user.id = randomUUID();
-  usersRepo.addUser(user);
-
-  return user;
-};
+export const addUser = (body: User): Promise<User> => usersRepo.addUser(body);
 
 /**
  * The function of updating the user record in the database
@@ -43,20 +32,10 @@ export const addUser = (body: User): User => {
  * @param userId - user ID
  * @returns The updated user record if the record was found or `undefined` if not
  */
-export const updateUser = (body: User, userId: string): User | undefined => {
-  const indexDB: number = usersRepo.getIndexDB(userId);
-
-  if (indexDB !== -1) {
-    const user: User = { ...body };
-
-    user.id = userId;
-    usersRepo.updateUser(user, indexDB);
-
-    return user;
-  }
-
-  return undefined;
-};
+export const updateUser = (
+  body: User,
+  userId: string
+): Promise<User | undefined> => usersRepo.updateUser(body, userId);
 
 /**
  * The function of deleting the user record from the database
@@ -64,23 +43,5 @@ export const updateUser = (body: User, userId: string): User | undefined => {
  * @param userId - user ID
  * @returns The value is `true` if the deletion was successful and `false` if not
  */
-export const removeUser = (userId: string): boolean => {
-  const indexDB: number = usersRepo.getIndexDB(userId);
-
-  if (indexDB !== -1) {
-    const tasks: Task[] = tasksService.getAllTasksByUser(userId);
-
-    tasks.forEach((task: Task) => {
-      const newTask: Task = { ...task };
-
-      newTask.userId = null;
-      tasksService.updateTask(newTask, newTask.boardId, newTask.id as string);
-    });
-
-    usersRepo.removeUser(indexDB);
-
-    return true;
-  }
-
-  return false;
-};
+export const removeUser = (userId: string): Promise<User | undefined> =>
+  usersRepo.removeUser(userId);

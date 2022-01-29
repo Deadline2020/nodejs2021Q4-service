@@ -1,14 +1,7 @@
+import { Board } from '../boards/board.model';
+import { Col } from '../columns/column.model';
+import { User } from '../users/user.model';
 import { Task } from './task.model';
-
-const taskDB: Task[] = [];
-
-/**
- * The function returns all task records with the corresponding user ID
- *
- * @param userId - user ID
- * @returns The array of task records
- */
-export const getAllTasksByUser = (userId: string): Task[] => taskDB.filter((task: Task): boolean => task.userId === userId);
 
 /**
  * The function returns all task records with the corresponding board ID
@@ -16,7 +9,8 @@ export const getAllTasksByUser = (userId: string): Task[] => taskDB.filter((task
  * @param boardId - board ID
  * @returns The array of task records
  */
-export const getAllTasksByBoard = (boardId: string): Task[] => taskDB.filter((task: Task): boolean => task.boardId === boardId);
+export const getAllTasksByBoard = (boardId: string): Promise<Task[]> =>
+  Task.find({ where: { boardId } });
 
 /**
  * The function returns the task record with the corresponding ID
@@ -24,48 +18,70 @@ export const getAllTasksByBoard = (boardId: string): Task[] => taskDB.filter((ta
  * @param taskId - task ID
  * @returns The task record if the record was found or `undefined` if not
  */
-export const getTask = (taskId: string): Task | undefined => taskDB.find((task: Task): boolean => task.id === taskId);
+export const getTask = async (taskId: string): Promise<Task | undefined> =>
+  Task.findOne(taskId);
 
 /**
  * The function of creating a task record in the database
  *
  * @param task - task data
  */
-export const addTask = (task: Task) => {
-  taskDB.push(task);
+export const addTask = async (task: Task, boardId: string): Promise<Task> => {
+  const newTask = new Task();
+
+  newTask.order = task.order;
+  newTask.title = task.title;
+  newTask.description = task.description;
+
+  const board = await Board.findOne(boardId);
+  newTask.board = board || null;
+
+  if (task.userId) {
+    const user = await User.findOne(task.userId);
+    newTask.user = user || null;
+  }
+  if (task.columnId) {
+    const column = await Col.findOne(task.columnId);
+    newTask.column = column || null;
+  }
+
+  await newTask.save();
+
+  return newTask;
 };
 
 /**
  * The function of updating the task record in the database
  *
  * @param task - task data
- * @param indexDB - index of task record in database
+ * @param id - task id
  */
-export const updateTask = (task: Task, indexDB: number): void => {
-  taskDB.splice(indexDB, 1, task);
+export const updateTask = async (
+  taskData: Task,
+  id: string
+): Promise<Task | undefined> => {
+  const task = await getTask(id);
+
+  if (task) {
+    Task.merge(task, taskData);
+    await task.save();
+    return task;
+  }
+
+  return undefined;
 };
 
 /**
  * The function of deleting the task record from the database
  *
- * @param indexDB - index of task record in database
+ * @param id - task id
  */
-export const removeTask = (indexDB: number): void => {
-  taskDB.splice(indexDB, 1);
+export const removeTask = async (id: string): Promise<Task | undefined> => {
+  const task = await getTask(id);
+
+  if (task) {
+    return Task.remove(task);
+  }
+
+  return undefined;
 };
-
-/**
- * The function returns the index of task record in database
- *
- * @param taskId - task ID
- * @returns The index of task record in database if the record was found or `-1` if not
- */
-export const getIndexDB = (taskId: string): number => taskDB.findIndex((task: Task): boolean => task.id === taskId);
-
-/**
- * The function returns the task record with the corresponding index in database
- *
- * @param indexDB - index of task record in database
- * @returns The task record
- */
-export const getTaskByIndexDB = (indexDB: number) => taskDB[indexDB];

@@ -2,26 +2,30 @@ import {
   BaseEntity,
   Column,
   Entity,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-import { Col } from '../columns/column.model';
+import { Board } from '../boards/board.model';
 import { Task } from '../tasks/task.model';
 
 @Entity()
-export class Board extends BaseEntity {
+export class Col extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
   @Column({ type: 'varchar', length: 30 })
   title!: string;
 
-  @OneToMany(() => Col, (column) => column.board, {
-    eager: true,
-    cascade: true,
+  @Column({ type: 'smallint' })
+  order!: number;
+
+  @ManyToOne(() => Board, (board) => board.columns, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
   })
-  columns!: Col[];
+  board!: Board;
 
   @OneToMany(() => Task, (task) => task.boardId, {
     cascade: true,

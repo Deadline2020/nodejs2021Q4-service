@@ -14,7 +14,7 @@ services:
     networks:
       - custom_user_network
     volumes:
-      - ./logs:/usr/app/logs
+      - logs:/usr/app/logs
       - ./src:/usr/app/src
     restart: on-failure
 
@@ -31,9 +31,13 @@ services:
     networks:
       - custom_user_network
     volumes:
-      - ./database/data:/var/lib/postgresql/data
+      - database:/var/lib/postgresql/data
     restart: on-failure
 
 networks:
   custom_user_network:
     driver: bridge
+
+volumes:
+  logs:
+  database:

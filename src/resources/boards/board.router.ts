@@ -6,7 +6,8 @@ import {
 } from 'fastify';
 
 import * as boardsService from './board.service';
-import * as boardsModel from './board.model';
+import * as boardsSchema from './board.schema';
+import { IBoard } from '../../common/types';
 import { Board } from './board.model';
 
 interface Params {
@@ -14,7 +15,7 @@ interface Params {
 }
 
 interface Request extends FastifyRequest {
-  body: Board;
+  body: IBoard;
 }
 
 /**
@@ -23,8 +24,11 @@ interface Request extends FastifyRequest {
  * @param _ - http request object (not used)
  * @param reply - http reply object
  */
-const getAllBoards = (_: FastifyRequest, reply: FastifyReply): void => {
-  const allBoards: Board[] = boardsService.getAllBoards();
+const getAllBoards = async (
+  _: FastifyRequest,
+  reply: FastifyReply
+): Promise<void> => {
+  const allBoards: Board[] = await boardsService.getAllBoards();
 
   reply.send(allBoards);
 };
@@ -35,9 +39,12 @@ const getAllBoards = (_: FastifyRequest, reply: FastifyReply): void => {
  * @param req - http request object
  * @param reply - http reply object
  */
-const getBoard = (req: FastifyRequest, reply: FastifyReply): void => {
+const getBoard = async (
+  req: FastifyRequest,
+  reply: FastifyReply
+): Promise<void> => {
   const { boardId } = req.params as Params;
-  const board: Board | undefined = boardsService.getBoard(boardId);
+  const board: Board | undefined = await boardsService.getBoard(boardId);
 
   if (board) {
     reply.send(board);
@@ -54,10 +61,12 @@ const getBoard = (req: FastifyRequest, reply: FastifyReply): void => {
  * @param req - http request object
  * @param reply - http reply object
  */
-const addBoard = (req: FastifyRequest, reply: FastifyReply): void => {
+const addBoard = async (
+  req: FastifyRequest,
+  reply: FastifyReply
+): Promise<void> => {
   const { body } = req as Request;
-  const board: Board = boardsService.addBoard(body);
-
+  const board: Board = (await boardsService.addBoard(body as Board)) as Board;
   reply.code(201).send(board);
 };
 
@@ -67,10 +76,16 @@ const addBoard = (req: FastifyRequest, reply: FastifyReply): void => {
  * @param req - http request object
  * @param reply - http reply object
  */
-const updateBoard = (req: FastifyRequest, reply: FastifyReply): void => {
+const updateBoard = async (
+  req: FastifyRequest,
+  reply: FastifyReply
+): Promise<void> => {
   const { boardId } = req.params as Params;
   const { body } = req as Request;
-  const board: Board | undefined = boardsService.updateBoard(body, boardId);
+  const board: Board | undefined = await boardsService.updateBoard(
+    body as Board,
+    boardId
+  );
 
   if (board) {
     reply.send(board);
@@ -87,10 +102,13 @@ const updateBoard = (req: FastifyRequest, reply: FastifyReply): void => {
  * @param req - http request object
  * @param reply - http reply object
  */
-const removeBoard = (req: FastifyRequest, reply: FastifyReply): void => {
+const removeBoard = async (
+  req: FastifyRequest,
+  reply: FastifyReply
+): Promise<void> => {
   const { boardId } = req.params as Params;
 
-  if (boardsService.removeBoard(boardId)) {
+  if (await boardsService.removeBoard(boardId)) {
     reply.code(204).send();
   } else {
     reply.status(404).send({
@@ -109,13 +127,13 @@ const removeBoard = (req: FastifyRequest, reply: FastifyReply): void => {
 function boardRoutes(
   app: FastifyInstance,
   _: FastifyPluginOptions,
-  done: () => void,
+  done: () => void
 ): void {
-  app.get('/boards', boardsModel.getAllBoards, getAllBoards);
-  app.get('/boards/:boardId', boardsModel.getBoard, getBoard);
-  app.post('/boards', boardsModel.addBoard, addBoard);
-  app.put('/boards/:boardId', boardsModel.updateBoard, updateBoard);
-  app.delete('/boards/:boardId', boardsModel.removeBoard, removeBoard);
+  app.get('/boards', boardsSchema.getAllBoards, getAllBoards);
+  app.get('/boards/:boardId', boardsSchema.getBoard, getBoard);
+  app.post('/boards', boardsSchema.addBoard, addBoard);
+  app.put('/boards/:boardId', boardsSchema.updateBoard, updateBoard);
+  app.delete('/boards/:boardId', boardsSchema.removeBoard, removeBoard);
 
   done();
 }
