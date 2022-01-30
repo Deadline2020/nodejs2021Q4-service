@@ -24,20 +24,17 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
-  async addUser(@Body() userDto: UserDto) {
-    // const aaa = await this.userService.addUser(userDto);
-    // console.log('addUser: ', aaa);
-    // return aaa;
+  async addUser(@Body() userDto: UserDto): Promise<User> {
     return await this.userService.addUser(userDto);
   }
 
   @Get()
-  async getAllUsers() {
+  async getAllUsers(): Promise<User[]> {
     return await this.userService.getAllUsers();
   }
 
   @Get(':userId')
-  async getUser(@Param('userId') userId: string) {
+  async getUser(@Param('userId') userId: string): Promise<User> {
     const user: User | undefined = await this.userService.getUserById(userId);
 
     if (!user) {
@@ -48,7 +45,10 @@ export class UserController {
   }
 
   @Put(':userId')
-  async updateUser(@Param('userId') userId: string, @Body() userDto: UserDto) {
+  async updateUser(
+    @Param('userId') userId: string,
+    @Body() userDto: UserDto,
+  ): Promise<User> {
     const user: User | undefined = await this.userService.updateUser(
       userId,
       userDto,
@@ -58,13 +58,12 @@ export class UserController {
       throw new NotFoundException('User not found');
     }
 
-    // console.log('updateUser: ', user);
     return user;
   }
 
   @Delete(':userId')
   @HttpCode(STATUS_CODES.NO_CONTENT)
-  async removeUser(@Param('userId') userId: string) {
+  async removeUser(@Param('userId') userId: string): Promise<void> {
     const deleteResult: DeleteResult = await this.userService.removeUser(
       userId,
     );
