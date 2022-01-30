@@ -16,4 +16,8 @@ export class ColumnService {
     const newColumn: Col = this.columnRepo.create(columnDto);
     return await this.columnRepo.save(newColumn);
   }
+
+  async getColumn(columnId: string): Promise<Col | undefined> {
+    return await this.columnRepo.findOne(columnId);
+  }
 }

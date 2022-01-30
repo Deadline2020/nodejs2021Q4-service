@@ -9,6 +9,7 @@ import {
 import { User } from '../users/user.model';
 import { Board } from '../boards/board.model';
 import { Col } from '../columns/column.model';
+import { Exclude } from 'class-transformer';
 
 @Entity()
 export class Task extends BaseEntity {
@@ -31,6 +32,7 @@ export class Task extends BaseEntity {
     onDelete: 'SET NULL',
     nullable: true,
   })
+  @Exclude({ toPlainOnly: true })
   user!: User | null;
 
   @Column({ nullable: true })
@@ -39,6 +41,7 @@ export class Task extends BaseEntity {
   @ManyToOne(() => Board, (board) => board.tasks, {
     onDelete: 'CASCADE',
   })
+  @Exclude({ toPlainOnly: true })
   board!: Board | null;
 
   @Column({ nullable: true })
@@ -47,5 +50,6 @@ export class Task extends BaseEntity {
   @ManyToOne(() => Col, (column) => column.tasks, {
     nullable: true,
   })
+  @Exclude({ toPlainOnly: true })
   column!: Col | null;
 }
