@@ -25,9 +25,9 @@ export class UserService {
     return await this.userRepo.findOne(userId);
   }
 
-  // async getUserByLogin(login: string): Promise<User | undefined> {
-  //   return await this.userRepo.findOne({ where: { login } });
-  // }
+  async getUserByLogin(login: string): Promise<User | undefined> {
+    return await this.userRepo.findOne({ where: { login } });
+  }
 
   async updateUser(id: string, userDto: UserDto): Promise<User | undefined> {
     const user: User | undefined = await this.getUserById(id);

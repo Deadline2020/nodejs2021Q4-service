@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import typeORMConfig from './common/ormconfig';
+import { AuthModule } from './resources/auth/auth.module';
 import { BoardModule } from './resources/boards/board.module';
 import { ColumnModule } from './resources/columns/column.module';
 import { TaskModule } from './resources/tasks/task.module';
@@ -16,6 +17,7 @@ import { UserModule } from './resources/users/user.module';
     BoardModule,
     ColumnModule,
     TaskModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
