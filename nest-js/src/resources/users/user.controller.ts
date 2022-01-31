@@ -10,6 +10,7 @@ import {
   NotFoundException,
   UseInterceptors,
   ClassSerializerInterceptor,
+  UseGuards,
 } from '@nestjs/common';
 import { DeleteResult } from 'typeorm';
 
@@ -17,8 +18,10 @@ import { UserDto } from './user.dto';
 import { UserService } from './user.service';
 import STATUS_CODES from 'src/common/status-code';
 import { User } from './user.model';
+import { AuthGuard } from '../guards/auth.guard';
 
 @Controller('users')
+@UseGuards(AuthGuard)
 @UseInterceptors(ClassSerializerInterceptor)
 export class UserController {
   constructor(private readonly userService: UserService) {}

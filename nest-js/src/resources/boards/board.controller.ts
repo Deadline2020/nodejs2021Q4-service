@@ -8,6 +8,7 @@ import {
   Delete,
   NotFoundException,
   HttpCode,
+  UseGuards,
 } from '@nestjs/common';
 import { DeleteResult } from 'typeorm';
 
@@ -15,8 +16,10 @@ import { BoardService } from './board.service';
 import { BoardDto } from './board.dto';
 import { Board } from './board.model';
 import STATUS_CODES from 'src/common/status-code';
+import { AuthGuard } from '../guards/auth.guard';
 
 @Controller('boards')
+@UseGuards(AuthGuard)
 export class BoardController {
   constructor(private readonly boardService: BoardService) {}
 

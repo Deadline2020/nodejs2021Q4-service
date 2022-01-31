@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import jwt from 'jsonwebtoken';
-// import bcrypt from 'bcrypt';
+import bcrypt from 'bcrypt';
 
 import { AuthDto } from './auth.dto';
 import { UserService } from '../users/user.service';
@@ -18,8 +18,7 @@ export class AuthService {
     let token: string | undefined;
 
     if (user) {
-      // const isCorrectPassword = await bcrypt.compare(password, user.password);
-      const isCorrectPassword = authDto.password === user.password;
+      const isCorrectPassword = await bcrypt.compare(authDto.password, user.password);
 
       if (isCorrectPassword) {
         const payload = { userId: user.id, login: user.login };
