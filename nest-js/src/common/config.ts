@@ -13,6 +13,7 @@ const config = {
   LOGGER_LEVEL: process.env.LOGGER_LEVEL || 'silent',
   ADMIN_DEFAULT_LOGIN: process.env.ADMIN_DEFAULT_LOGIN || 'admin',
   ADMIN_DEFAULT_PASSWORD: process.env.ADMIN_DEFAULT_PASSWORD || 'admin',
+  USE_FASTIFY: process.env.USE_FASTIFY || 'true',
 };
 
 export default config;
