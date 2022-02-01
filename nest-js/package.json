@@ -18,7 +18,9 @@
     "typeorm:cli": "ts-node ./node_modules/typeorm/cli -f ./src/common/ormconfig.ts",
     "migration:generate": "npm run typeorm:cli -- migration:generate -n migration",
     "migration:run": "npm run typeorm:cli -- migration:run",
-    "migration:revert": "npm run typeorm:cli -- migration:revert"
+    "migration:revert": "npm run typeorm:cli -- migration:revert",
+    "artillery:run": "artillery run --output report.json artillery-config.yaml",
+    "artillery:report": "artillery report --output report.html report.json"
   },
   "license": "ISC",
   "engines": {
@@ -71,6 +73,7 @@
     "@types/supertest": "^2.0.11",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
+    "artillery": "^2.0.0-11",
     "chai": "4.3.4",
     "debug": "4.3.2",
     "dirty-chai": "2.0.1",
