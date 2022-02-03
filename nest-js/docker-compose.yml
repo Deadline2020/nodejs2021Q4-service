@@ -14,7 +14,7 @@ services:
     networks:
       - custom_user_network
     volumes:
-      # - logs:/usr/app/logs
+      - logs:/usr/app/logs
       - ./src:/usr/app/src
     restart: on-failure
 
@@ -39,5 +39,5 @@ networks:
     driver: bridge
 
 volumes:
-  # logs:
+  logs:
   database:

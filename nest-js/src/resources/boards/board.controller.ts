@@ -16,7 +16,7 @@ import { BoardService } from './board.service';
 import { BoardDto } from './board.dto';
 import { Board } from './board.model';
 import STATUS_CODES from 'src/common/status-code';
-import { AuthGuard } from '../guards/auth.guard';
+import { AuthGuard } from 'src/guards/auth.guard';
 
 @Controller('boards')
 @UseGuards(AuthGuard)

@@ -4,6 +4,7 @@ import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
+import { Logger } from 'nestjs-pino';
 
 import { AppModule } from './app.module';
 import config from './common/config';
@@ -19,7 +20,7 @@ async function bootstrap() {
   } else {
     app = await NestFactory.create(AppModule);
   }
-
+  app.useLogger(app.get(Logger));
   app.useGlobalPipes(new ValidationPipe());
   await app.listen(config.PORT as string, '0.0.0.0', () =>
     process.stdout.write(
