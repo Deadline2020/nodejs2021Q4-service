@@ -16,6 +16,7 @@ services:
     volumes:
       - logs:/usr/app/logs
       - ./src:/usr/app/src
+      - storage:/usr/app/storage
     restart: on-failure
 
   database:
@@ -41,3 +42,4 @@ networks:
 volumes:
   logs:
   database:
+  storage:

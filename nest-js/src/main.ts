@@ -4,6 +4,7 @@ import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
+import { contentParser } from 'fastify-multer';
 import { Logger } from 'nestjs-pino';
 
 import { AppModule } from './app.module';
@@ -13,10 +14,13 @@ async function bootstrap() {
   let app: INestApplication | NestFastifyApplication;
 
   if (config.USE_FASTIFY === 'true') {
-    app = await NestFactory.create<NestFastifyApplication>(
-      AppModule,
-      new FastifyAdapter(),
-    );
+    const fastify: NestFastifyApplication =
+      await NestFactory.create<NestFastifyApplication>(
+        AppModule,
+        new FastifyAdapter(),
+      );
+    fastify.register(contentParser);
+    app = fastify;
   } else {
     app = await NestFactory.create(AppModule);
   }

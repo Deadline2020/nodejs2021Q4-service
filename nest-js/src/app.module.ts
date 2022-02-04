@@ -11,6 +11,7 @@ import loggerConfig from './logger/logger-config';
 import { AuthModule } from './resources/auth/auth.module';
 import { BoardModule } from './resources/boards/board.module';
 import { ColumnModule } from './resources/columns/column.module';
+import { FileModule } from './resources/file/file.module';
 import { TaskModule } from './resources/tasks/task.module';
 import { UserModule } from './resources/users/user.module';
 
@@ -25,6 +26,7 @@ import { UserModule } from './resources/users/user.module';
     ColumnModule,
     TaskModule,
     AuthModule,
+    FileModule,
   ],
   controllers: [AppController],
   providers: [
