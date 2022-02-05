@@ -1,48 +1,72 @@
-import * as boardsRepo from './board.memory.repository';
+import { DeleteResult, Repository } from 'typeorm';
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+
+import { BoardDto } from './board.dto';
 import { Board } from './board.model';
+import { ColumnService } from '../columns/column.service';
+import { Col } from '../columns/column.model';
 
-/**
- * The function returns all board records from the database
- *
- * @returns The array of board records
- */
-export const getAllBoards = (): Promise<Board[]> => boardsRepo.getAllBoards();
+@Injectable()
+export class BoardService {
+  constructor(
+    @InjectRepository(Board)
+    private boardRepo: Repository<Board>,
+    private readonly columnService: ColumnService,
+  ) {}
 
-/**
- * The function returns the board record with the corresponding ID
- *
- * @param boardId - board ID
- * @returns The board record if the record was found or `undefined` if not
- */
-export const getBoard = (boardId: string): Promise<Board | undefined> =>
-  boardsRepo.getBoard(boardId);
+  async addBoard(boardDto: BoardDto): Promise<Board | undefined> {
+    const newBoard: Board = this.boardRepo.create();
+    newBoard.title = boardDto.title;
+    await this.boardRepo.save(newBoard);
 
-/**
- * The function of creating a board record in the database
- *
- * @param body - board data
- * @returns The new board record
- */
-export const addBoard = (body: Board): Promise<Board | undefined> =>
-  boardsRepo.addBoard(body);
+    await Promise.all(
+      boardDto.columns.map((column: Col) => {
+        column.board = newBoard;
+        return this.columnService.addColumn(column);
+      }),
+    );
 
-/**
- * The function of updating the board record in the database
- *
- * @param body - board data
- * @param boardId - board ID
- * @returns The updated board record if the record was found or `undefined` if not
- */
-export const updateBoard = (
-  body: Board,
-  boardId: string
-): Promise<Board | undefined> => boardsRepo.updateBoard(body, boardId);
+    return this.boardRepo
+      .createQueryBuilder('board')
+      .where('board.id=:id', { id: newBoard.id })
+      .leftJoinAndSelect('board.columns', 'column')
+      .orderBy('column.order', 'ASC')
+      .getOne();
+  }
 
-/**
- * The function of deleting the board record from the database
- *
- * @param boardId - board ID
- * @returns The value is `true` if the deletion was successful and `false` if not
- */
-export const removeBoard = (boardId: string): Promise<Board | undefined> =>
-  boardsRepo.removeBoard(boardId);
+  async getAllBoards(): Promise<Board[]> {
+    return await this.boardRepo
+      .createQueryBuilder('board')
+      .leftJoinAndSelect('board.columns', 'column')
+      .orderBy('column.order', 'ASC')
+      .getMany();
+  }
+
+  async getBoard(boardId: string): Promise<Board | undefined> {
+    return await this.boardRepo
+      .createQueryBuilder('board')
+      .where('board.id=:id', { id: boardId })
+      .leftJoinAndSelect('board.columns', 'column')
+      .orderBy('column.order', 'ASC')
+      .getOne();
+  }
+
+  async updateBoard(
+    boardId: string,
+    boardDto: BoardDto,
+  ): Promise<Board | undefined> {
+    const board: Board | undefined = await this.getBoard(boardId);
+
+    if (board) {
+      this.boardRepo.merge(board, boardDto);
+      return await this.boardRepo.save(board);
+    }
+
+    return undefined;
+  }
+
+  async removeBoard(boardId: string): Promise<DeleteResult> {
+    return await this.boardRepo.delete(boardId);
+  }
+}

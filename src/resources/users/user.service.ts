@@ -1,58 +1,55 @@
-import * as usersRepo from './user.memory.repository';
+import { DeleteResult, Repository } from 'typeorm';
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import bcrypt from 'bcrypt';
+
+import { UserDto } from './user.dto';
 import { User } from './user.model';
 
-/**
- * The function returns all user records from the database
- *
- * @returns The array of user records
- */
-export const getAllUsers = (): Promise<User[]> => usersRepo.getAllUsers();
+@Injectable()
+export class UserService {
+  constructor(
+    @InjectRepository(User)
+    private userRepo: Repository<User>,
+  ) {}
 
-/**
- * The function returns the user record with the corresponding ID
- *
- * @param userId - user ID
- * @returns The user record if the record was found or `undefined` if not
- */
-export const getUser = (userId: string): Promise<User | undefined> =>
-  usersRepo.getUserById(userId);
+  async addUser(userDto: UserDto): Promise<User> {
+    const newUser: User = this.userRepo.create(userDto);
+    newUser.password = await this.getHash(userDto.password);
+    return await this.userRepo.save(newUser);
+  }
 
-/**
- * The function of creating a user record in the database
- *
- * @param body - user data
- * @returns The new user record
- */
-export const addUser = (body: User): Promise<User> => usersRepo.addUser(body);
+  async getAllUsers(): Promise<User[]> {
+    return await this.userRepo.find();
+  }
 
-/**
- * The function of updating the user record in the database
- *
- * @param body - user data
- * @param userId - user ID
- * @returns The updated user record if the record was found or `undefined` if not
- */
-export const updateUser = (
-  body: User,
-  userId: string
-): Promise<User | undefined> => usersRepo.updateUser(body, userId);
+  async getUserById(userId: string): Promise<User | undefined> {
+    return await this.userRepo.findOne(userId);
+  }
 
-/**
- * The function of deleting the user record from the database
- *
- * @param userId - user ID
- * @returns The value is `true` if the deletion was successful and `false` if not
- */
-export const removeUser = (userId: string): Promise<User | undefined> =>
-  usersRepo.removeUser(userId);
+  async getUserByLogin(login: string): Promise<User | undefined> {
+    return await this.userRepo.findOne({ where: { login } });
+  }
 
-/**
- * The function of creating the default admin record in the database
- *
- * @param login - admin login
- * @param password - admin password
- */
-export const setDefaultAdmin = (
-  login: string,
-  password: string
-): Promise<void> => usersRepo.setDefaultAdmin(login, password);
+  async updateUser(id: string, userDto: UserDto): Promise<User | undefined> {
+    const user: User | undefined = await this.getUserById(id);
+
+    if (user) {
+      const newUser: UserDto = { ...userDto };
+      newUser.password = await this.getHash(userDto.password);
+      this.userRepo.merge(user, newUser);
+      return await this.userRepo.save(user);
+    }
+
+    return undefined;
+  }
+
+  async removeUser(id: string): Promise<DeleteResult> {
+    return await this.userRepo.delete(id);
+  }
+
+  private async getHash(password: string): Promise<string> {
+    const salt: string = await bcrypt.genSalt(10);
+    return await bcrypt.hash(password, salt);
+  }
+}
