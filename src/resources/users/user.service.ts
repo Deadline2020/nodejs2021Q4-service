@@ -13,7 +13,15 @@ export class UserService {
     private userRepo: Repository<User>
   ) {}
 
-  async addUser(userDto: UserDto): Promise<User> {
+  async addUser(userDto: UserDto): Promise<User | undefined> {
+    const existingUser: User | undefined = await this.getUserByLogin(
+      userDto.login
+    );
+
+    if (existingUser) {
+      return undefined;
+    }
+
     const newUser: User = this.userRepo.create(userDto);
     newUser.password = await this.getHash(userDto.password);
     return await this.userRepo.save(newUser);

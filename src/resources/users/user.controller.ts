@@ -11,6 +11,7 @@ import {
   UseInterceptors,
   ClassSerializerInterceptor,
   UseGuards,
+  BadRequestException,
 } from '@nestjs/common';
 import { DeleteResult } from 'typeorm';
 
@@ -28,7 +29,13 @@ export class UserController {
 
   @Post()
   async addUser(@Body() userDto: UserDto): Promise<User> {
-    return await this.userService.addUser(userDto);
+    const user: User | undefined = await this.userService.addUser(userDto);
+
+    if (!user) {
+      throw new BadRequestException('User with this login already exists');
+    }
+
+    return user;
   }
 
   @Get()
