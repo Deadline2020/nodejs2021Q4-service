@@ -7,33 +7,39 @@ import {
   UploadedFile,
   StreamableFile,
   NotFoundException,
+  UseGuards,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { FileFastifyInterceptor } from 'fastify-file-interceptor';
 import { diskStorage } from 'multer';
 import { ReadStream } from 'fs';
 
-import { getStorageFileName } from './file.utils';
 import config from 'src/common/config';
 import { FileService } from './file.service';
+import { AuthGuard } from 'src/guards/auth.guard';
 
 @Controller('file')
 export class FileController {
   constructor(private readonly fileService: FileService) {}
 
   @Post()
+  @UseGuards(AuthGuard)
   @UseInterceptors(
     config.USE_FASTIFY === 'true'
       ? FileFastifyInterceptor('file', {
           storage: diskStorage({
             destination: './storage',
-            filename: getStorageFileName,
+            filename: (_, file, callback) => {
+              callback(null, `${Date.now()}.${file.originalname}`);
+            },
           }),
         })
       : FileInterceptor('file', {
           storage: diskStorage({
             destination: './storage',
-            filename: getStorageFileName,
+            filename: (_, file, callback) => {
+              callback(null, `${Date.now()}.${file.originalname}`);
+            },
           }),
         })
   )
