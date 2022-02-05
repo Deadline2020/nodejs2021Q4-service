@@ -18,7 +18,7 @@ export class TaskService {
     private taskRepo: Repository<Task>,
     private readonly boardService: BoardService,
     private readonly columnService: ColumnService,
-    private readonly userService: UserService,
+    private readonly userService: UserService
   ) {}
 
   async addTask(boardId: string, taskDto: TaskDto): Promise<Task> {
@@ -29,13 +29,13 @@ export class TaskService {
 
     if (taskDto.userId) {
       const user: User | undefined = await this.userService.getUserById(
-        taskDto.userId,
+        taskDto.userId
       );
       newTask.user = user || null;
     }
     if (taskDto.columnId) {
       const column: Col | undefined = await this.columnService.getColumn(
-        taskDto.columnId,
+        taskDto.columnId
       );
       newTask.column = column || null;
     }
@@ -54,7 +54,7 @@ export class TaskService {
   async updateTask(
     boardId: string,
     taskId: string,
-    taskDto: TaskDto,
+    taskDto: TaskDto
   ): Promise<Task | undefined> {
     const task: Task | undefined = await this.getTask(boardId, taskId);
 
@@ -68,7 +68,7 @@ export class TaskService {
 
   async removeTask(
     boardId: string,
-    taskId: string,
+    taskId: string
   ): Promise<DeleteResult | null> {
     const task: Task | undefined = await this.getTask(boardId, taskId);
 

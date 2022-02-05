@@ -12,7 +12,7 @@ export class BoardService {
   constructor(
     @InjectRepository(Board)
     private boardRepo: Repository<Board>,
-    private readonly columnService: ColumnService,
+    private readonly columnService: ColumnService
   ) {}
 
   async addBoard(boardDto: BoardDto): Promise<Board | undefined> {
@@ -24,7 +24,7 @@ export class BoardService {
       boardDto.columns.map((column: Col) => {
         column.board = newBoard;
         return this.columnService.addColumn(column);
-      }),
+      })
     );
 
     return this.boardRepo
@@ -54,7 +54,7 @@ export class BoardService {
 
   async updateBoard(
     boardId: string,
-    boardDto: BoardDto,
+    boardDto: BoardDto
   ): Promise<Board | undefined> {
     const board: Board | undefined = await this.getBoard(boardId);
 

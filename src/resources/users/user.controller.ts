@@ -50,11 +50,11 @@ export class UserController {
   @Put(':userId')
   async updateUser(
     @Param('userId') userId: string,
-    @Body() userDto: UserDto,
+    @Body() userDto: UserDto
   ): Promise<User> {
     const user: User | undefined = await this.userService.updateUser(
       userId,
-      userDto,
+      userDto
     );
 
     if (!user) {
@@ -68,7 +68,7 @@ export class UserController {
   @HttpCode(STATUS_CODES.NO_CONTENT)
   async removeUser(@Param('userId') userId: string): Promise<void> {
     const deleteResult: DeleteResult = await this.userService.removeUser(
-      userId,
+      userId
     );
 
     if (!deleteResult.affected) {

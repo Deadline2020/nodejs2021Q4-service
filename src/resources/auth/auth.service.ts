@@ -13,12 +13,15 @@ export class AuthService {
 
   async getToken(authDto: AuthDto): Promise<string | undefined> {
     const user: User | undefined = await this.userService.getUserByLogin(
-      authDto.login,
+      authDto.login
     );
     let token: string | undefined;
 
     if (user) {
-      const isCorrectPassword = await bcrypt.compare(authDto.password, user.password);
+      const isCorrectPassword = await bcrypt.compare(
+        authDto.password,
+        user.password
+      );
 
       if (isCorrectPassword) {
         const payload = { userId: user.id, login: user.login };

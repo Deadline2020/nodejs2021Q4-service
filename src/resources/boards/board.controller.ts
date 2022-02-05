@@ -47,11 +47,11 @@ export class BoardController {
   @Put(':boardId')
   async updateBoard(
     @Param('boardId') boardId: string,
-    @Body() boardDto: BoardDto,
+    @Body() boardDto: BoardDto
   ): Promise<Board> {
     const board: Board | undefined = await this.boardService.updateBoard(
       boardId,
-      boardDto,
+      boardDto
     );
 
     if (!board) {
@@ -65,7 +65,7 @@ export class BoardController {
   @HttpCode(STATUS_CODES.NO_CONTENT)
   async removeBoardUser(@Param('boardId') boardId: string): Promise<void> {
     const deleteResult: DeleteResult = await this.boardService.removeBoard(
-      boardId,
+      boardId
     );
 
     if (!deleteResult.affected) {

@@ -9,7 +9,7 @@ import { ColumnDto } from './column.dto';
 export class ColumnService {
   constructor(
     @InjectRepository(Col)
-    private columnRepo: Repository<Col>,
+    private columnRepo: Repository<Col>
   ) {}
 
   async addColumn(columnDto: ColumnDto): Promise<Col> {

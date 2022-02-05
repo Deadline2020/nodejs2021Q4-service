@@ -17,7 +17,7 @@ async function bootstrap() {
     const fastify: NestFastifyApplication =
       await NestFactory.create<NestFastifyApplication>(
         AppModule,
-        new FastifyAdapter(),
+        new FastifyAdapter()
       );
     fastify.register(contentParser);
     app = fastify;
@@ -30,8 +30,8 @@ async function bootstrap() {
     process.stdout.write(
       `App is running on http://localhost:${config.PORT} (${
         config.USE_FASTIFY === 'true' ? 'FASTIFY' : 'EXPRESS'
-      } platform)\n`,
-    ),
+      } platform)\n`
+    )
   );
 }
 bootstrap();

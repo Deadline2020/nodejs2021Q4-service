@@ -29,7 +29,7 @@ export class TaskController {
   @Post()
   async addTask(
     @Param('boardId') boardId: string,
-    @Body() taskDto: TaskDto,
+    @Body() taskDto: TaskDto
   ): Promise<Task> {
     return await this.taskService.addTask(boardId, taskDto);
   }
@@ -42,11 +42,11 @@ export class TaskController {
   @Get(':taskId')
   async getTask(
     @Param('boardId') boardId: string,
-    @Param('taskId') taskId: string,
+    @Param('taskId') taskId: string
   ): Promise<Task> {
     const task: Task | undefined = await this.taskService.getTask(
       boardId,
-      taskId,
+      taskId
     );
 
     if (!task) {
@@ -60,12 +60,12 @@ export class TaskController {
   async updateTask(
     @Param('boardId') boardId: string,
     @Param('taskId') taskId: string,
-    @Body() taskDto: TaskDto,
+    @Body() taskDto: TaskDto
   ): Promise<Task> {
     const task: Task | undefined = await this.taskService.updateTask(
       boardId,
       taskId,
-      taskDto,
+      taskDto
     );
 
     if (!task) {
@@ -79,11 +79,11 @@ export class TaskController {
   @HttpCode(STATUS_CODES.NO_CONTENT)
   async removeTask(
     @Param('boardId') boardId: string,
-    @Param('taskId') taskId: string,
+    @Param('taskId') taskId: string
   ) {
     const deleteResult: DeleteResult | null = await this.taskService.removeTask(
       boardId,
-      taskId,
+      taskId
     );
 
     if (!deleteResult?.affected) {

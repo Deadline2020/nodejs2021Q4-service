@@ -18,8 +18,6 @@ import config from 'src/common/config';
 
 @Controller('file')
 export class FileController {
-  constructor() {}
-
   @Post()
   @UseInterceptors(
     config.USE_FASTIFY === 'true'
@@ -34,7 +32,7 @@ export class FileController {
             destination: './storage',
             filename: getStorageFileName,
           }),
-        }),
+        })
   )
   uploadFile(@UploadedFile() file: Express.Multer.File) {
     return {
@@ -45,7 +43,7 @@ export class FileController {
   @Get(':filename')
   downloadFile(@Param('filename') filename: string): StreamableFile {
     const stream: ReadStream = createReadStream(
-      join(process.cwd(), 'storage', filename),
+      join(process.cwd(), 'storage', filename)
     );
     return new StreamableFile(stream);
   }

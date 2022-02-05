@@ -10,7 +10,7 @@ import { User } from './user.model';
 export class UserService {
   constructor(
     @InjectRepository(User)
-    private userRepo: Repository<User>,
+    private userRepo: Repository<User>
   ) {}
 
   async addUser(userDto: UserDto): Promise<User> {
