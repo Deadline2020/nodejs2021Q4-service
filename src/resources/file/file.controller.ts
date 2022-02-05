@@ -6,18 +6,21 @@ import {
   UseInterceptors,
   UploadedFile,
   StreamableFile,
+  NotFoundException,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { FileFastifyInterceptor } from 'fastify-file-interceptor';
 import { diskStorage } from 'multer';
-import { createReadStream, ReadStream } from 'fs';
-import { join } from 'path';
+import { ReadStream } from 'fs';
 
 import { getStorageFileName } from './file.utils';
 import config from 'src/common/config';
+import { FileService } from './file.service';
 
 @Controller('file')
 export class FileController {
+  constructor(private readonly fileService: FileService) {}
+
   @Post()
   @UseInterceptors(
     config.USE_FASTIFY === 'true'
@@ -42,9 +45,11 @@ export class FileController {
 
   @Get(':filename')
   downloadFile(@Param('filename') filename: string): StreamableFile {
-    const stream: ReadStream = createReadStream(
-      join(process.cwd(), 'storage', filename)
-    );
+    const stream: ReadStream | undefined = this.fileService.getStream(filename);
+
+    if (!stream) {
+      throw new NotFoundException('File not found');
+    }
     return new StreamableFile(stream);
   }
 }
