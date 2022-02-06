@@ -14,9 +14,9 @@ import { FileFastifyInterceptor } from 'fastify-file-interceptor';
 import { diskStorage } from 'multer';
 import { ReadStream } from 'fs';
 
-import config from 'src/common/config';
+import config from '../../common/config';
 import { FileService } from './file.service';
-import { AuthGuard } from 'src/guards/auth.guard';
+import { AuthGuard } from '../../guards/auth.guard';
 
 @Controller('file')
 export class FileController {

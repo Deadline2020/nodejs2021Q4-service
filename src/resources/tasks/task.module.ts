@@ -7,6 +7,7 @@ import { Task } from './task.model';
 import { BoardModule } from '../boards/board.module';
 import { ColumnModule } from '../columns/column.module';
 import { UserModule } from '../users/user.module';
+import { LoggerService } from '../../logger/logger.service';
 
 @Module({
   imports: [
@@ -16,6 +17,6 @@ import { UserModule } from '../users/user.module';
     UserModule,
   ],
   controllers: [TaskController],
-  providers: [TaskService],
+  providers: [TaskService, LoggerService],
 })
 export class TaskModule {}

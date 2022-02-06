@@ -15,8 +15,8 @@ import { DeleteResult } from 'typeorm';
 import { BoardService } from './board.service';
 import { BoardDto } from './board.dto';
 import { Board } from './board.model';
-import STATUS_CODES from 'src/common/status-code';
-import { AuthGuard } from 'src/guards/auth.guard';
+import STATUS_CODES from '../../common/status-code';
+import { AuthGuard } from '../../guards/auth.guard';
 
 @Controller('boards')
 @UseGuards(AuthGuard)

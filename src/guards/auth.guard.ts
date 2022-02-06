@@ -3,17 +3,15 @@ import {
   CanActivate,
   ExecutionContext,
   UnauthorizedException,
-  Logger,
 } from '@nestjs/common';
 import jwt from 'jsonwebtoken';
 
-import config from 'src/common/config';
-import { LogInterceptor } from 'src/interceptor/log.interceptor';
-import logger from 'src/logger/logger';
+import config from '../common/config';
+import { LoggerService } from '../logger/logger.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  private readonly logger = new Logger(LogInterceptor.name);
+  constructor(private readonly loggerService: LoggerService) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const req = context.switchToHttp().getRequest();
@@ -32,14 +30,14 @@ export class AuthGuard implements CanActivate {
     ];
 
     if (typeToken !== 'Bearer') {
-      logger(req);
+      this.loggerService.log(req);
       throw new UnauthorizedException();
     }
 
     try {
       jwt.verify(token, config.JWT_SECRET_KEY);
     } catch (error) {
-      logger(req);
+      this.loggerService.log(req);
       throw new UnauthorizedException();
     }
 

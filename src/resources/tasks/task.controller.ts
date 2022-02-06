@@ -17,8 +17,8 @@ import { DeleteResult } from 'typeorm';
 import { TaskService } from './task.service';
 import { TaskDto } from './task.dto';
 import { Task } from './task.model';
-import STATUS_CODES from 'src/common/status-code';
-import { AuthGuard } from 'src/guards/auth.guard';
+import STATUS_CODES from '../../common/status-code';
+import { AuthGuard } from '../../guards/auth.guard';
 
 @Controller('boards/:boardId/tasks')
 @UseGuards(AuthGuard)

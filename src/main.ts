@@ -1,4 +1,8 @@
-import { INestApplication, ValidationPipe } from '@nestjs/common';
+import {
+  INestApplication,
+  InternalServerErrorException,
+  ValidationPipe,
+} from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import {
   FastifyAdapter,
@@ -26,6 +30,15 @@ async function bootstrap() {
   }
   app.useLogger(app.get(Logger));
   app.useGlobalPipes(new ValidationPipe());
+
+  process.on('uncaughtException', (error: Error): void => {
+    throw new InternalServerErrorException(error);
+  });
+
+  process.on('unhandledRejection', (reason: Error): void => {
+    throw new InternalServerErrorException(reason);
+  });
+
   await app.listen(config.PORT as string, '0.0.0.0', () =>
     process.stdout.write(
       `App is running on http://localhost:${config.PORT} (${

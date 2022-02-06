@@ -5,7 +5,7 @@ import bcrypt from 'bcrypt';
 import { AuthDto } from './auth.dto';
 import { UserService } from '../users/user.service';
 import { User } from '../users/user.model';
-import config from 'src/common/config';
+import config from '../../common/config';
 
 @Injectable()
 export class AuthService {

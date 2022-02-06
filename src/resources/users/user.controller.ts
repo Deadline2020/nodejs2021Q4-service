@@ -17,9 +17,9 @@ import { DeleteResult } from 'typeorm';
 
 import { UserDto } from './user.dto';
 import { UserService } from './user.service';
-import STATUS_CODES from 'src/common/status-code';
+import STATUS_CODES from '../../common/status-code';
 import { User } from './user.model';
-import { AuthGuard } from 'src/guards/auth.guard';
+import { AuthGuard } from '../../guards/auth.guard';
 
 @Controller('users')
 @UseGuards(AuthGuard)

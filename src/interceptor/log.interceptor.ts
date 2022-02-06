@@ -5,13 +5,16 @@ import {
   CallHandler,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import logger from 'src/logger/logger';
+
+import { LoggerService } from '../logger/logger.service';
 
 @Injectable()
 export class LogInterceptor implements NestInterceptor {
+  constructor(private readonly loggerService: LoggerService) {}
+
   intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
     const request = context.switchToHttp().getRequest();
-    logger(request);
+    this.loggerService.log(request);
     return next.handle();
   }
 }

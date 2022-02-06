@@ -5,11 +5,11 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Exclude } from 'class-transformer';
 
 import { User } from '../users/user.model';
 import { Board } from '../boards/board.model';
 import { Col } from '../columns/column.model';
-import { Exclude } from 'class-transformer';
 
 @Entity()
 export class Task extends BaseEntity {
