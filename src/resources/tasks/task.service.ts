@@ -1,51 +1,81 @@
-import * as tasksRepo from './task.memory.repository';
+import { DeleteResult, Repository } from 'typeorm';
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+
+import { TaskDto } from './task.dto';
 import { Task } from './task.model';
+import { BoardService } from '../boards/board.service';
+import { ColumnService } from '../columns/column.service';
+import { UserService } from '../users/user.service';
+import { Board } from '../boards/board.model';
+import { User } from '../users/user.model';
+import { Col } from '../columns/column.model';
 
-/**
- * The function returns all task records from the database with the corresponding board ID
- *
- * @param boardId - board ID
- * @returns The array of task records
- */
-export const getAllTasksByBoard = (boardId: string): Promise<Task[]> =>
-  tasksRepo.getAllTasksByBoard(boardId);
+@Injectable()
+export class TaskService {
+  constructor(
+    @InjectRepository(Task)
+    private taskRepo: Repository<Task>,
+    private readonly boardService: BoardService,
+    private readonly columnService: ColumnService,
+    private readonly userService: UserService
+  ) {}
 
-/**
- * The function returns the task record with the corresponding user and board IDs
- *
- * @param taskId - task ID
- * @returns The task record if the record was found or `undefined` if not
- */
-export const getTask = (taskId: string): Promise<Task | undefined> =>
-  tasksRepo.getTask(taskId);
+  async addTask(boardId: string, taskDto: TaskDto): Promise<Task> {
+    const newTask: Task = this.taskRepo.create(taskDto);
 
-/**
- * The function of creating a task record in the database
- *
- * @param body - task data
- * @param boardId - board ID
- * @returns The new task record
- */
-export const addTask = (body: Task, boardId: string): Promise<Task> =>
-  tasksRepo.addTask(body, boardId);
+    const board: Board | undefined = await this.boardService.getBoard(boardId);
+    newTask.board = board || null;
 
-/**
- * The function of updating the task record in the database
- *
- * @param body - task data
- * @param taskId - task ID
- * @returns The updated task record if the record was found or `undefined` if not
- */
-export const updateTask = (
-  body: Task,
-  taskId: string
-): Promise<Task | undefined> => tasksRepo.updateTask(body, taskId);
+    if (taskDto.userId) {
+      const user: User | undefined = await this.userService.getUserById(
+        taskDto.userId
+      );
+      newTask.user = user || null;
+    }
+    if (taskDto.columnId) {
+      const column: Col | undefined = await this.columnService.getColumn(
+        taskDto.columnId
+      );
+      newTask.column = column || null;
+    }
 
-/**
- * The function of deleting the task record from the database
- *
- * @param taskId - task ID
- * @returns The value is `true` if the deletion was successful and `false` if not
- */
-export const removeTask = (taskId: string): Promise<Task | undefined> =>
-  tasksRepo.removeTask(taskId);
+    return await this.taskRepo.save(newTask);
+  }
+
+  async getAllTasksByBoard(boardId: string): Promise<Task[]> {
+    return await this.taskRepo.find({ where: { boardId } });
+  }
+
+  async getTask(boardId: string, id: string): Promise<Task | undefined> {
+    return await this.taskRepo.findOne({ where: { boardId, id } });
+  }
+
+  async updateTask(
+    boardId: string,
+    taskId: string,
+    taskDto: TaskDto
+  ): Promise<Task | undefined> {
+    const task: Task | undefined = await this.getTask(boardId, taskId);
+
+    if (task) {
+      this.taskRepo.merge(task, taskDto);
+      return await this.taskRepo.save(task);
+    }
+
+    return undefined;
+  }
+
+  async removeTask(
+    boardId: string,
+    taskId: string
+  ): Promise<DeleteResult | null> {
+    const task: Task | undefined = await this.getTask(boardId, taskId);
+
+    if (task) {
+      return await this.taskRepo.delete(taskId);
+    }
+
+    return null;
+  }
+}

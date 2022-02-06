@@ -81,3 +81,27 @@ npm run lint
 Press <kbd>F5</kbd> to debug.
 
 For more information, visit: https://code.visualstudio.com/docs/editor/debugging
+
+## Load testing reports
+
+### Express
+
+|                        |                            |                         |
+| ---------------------- | -------------------------- | ----------------------- |
+| Users                  | created, completed         | 3362, 2796              |
+| Http requests          |                            | 15094                   |
+| Http responses         | 200, 201, 204              | 8662, 3070, 2796        |
+| Errors ETIMEDOUT       |                            | 566                     |
+| Http response time, ms | mni, max, median, p95, p99 | 0, 9999, 60, 9607, 9999 |
+
+### Fastify
+
+|                        |                            |                        |
+| ---------------------- | -------------------------- | ---------------------- |
+| Users                  | created, completed         | 3377, 3114             |
+| Http requests          |                            | 16093                  |
+| Http responses         | 200, 201, 204              | 9472, 3244, 3114       |
+| Errors ETIMEDOUT       |                            | 263                    |
+| Http response time, ms | mni, max, median, p95, p99 | 0, 9999, 0, 8521, 9801 |
+
+Additional information can be found in test-report folder
